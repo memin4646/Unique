@@ -5,12 +5,10 @@ const config: CapacitorConfig = {
   appName: 'Unique',
   webDir: 'public',
   server: {
-    // BURAYA KENDİ VERCEL ADRESİNİ YAZMALISIN
-    // Örnek: https://unique-project.vercel.app
-    url: 'https://unique-cinema.vercel.app',
+    url: 'https://unique-lime-one.vercel.app',
     cleartext: true,
     allowNavigation: [
-      "unique-cinema.vercel.app",
+      "unique-lime-one.vercel.app",
       "*.vercel.app"
     ]
   }
