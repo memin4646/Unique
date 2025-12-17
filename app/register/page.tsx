@@ -29,12 +29,9 @@ export default function RegisterPage() {
             });
 
             if (res.ok) {
-                // Store password temporarily for auto-login after verification
-                if (typeof window !== 'undefined') {
-                    sessionStorage.setItem('temp_pwd', password);
-                }
-                // Redirect to verify page
-                router.push(`/verify?email=${encodeURIComponent(email)}`);
+                // Redirect to Login instead of verify, since we are auto-verified
+                // Ideally we could auto-sign-in here, but sending them to login is safe and easy
+                router.push("/login?registered=true");
             } else {
                 const data = await res.json();
                 setError(data.error || "Kayıt başarısız.");
