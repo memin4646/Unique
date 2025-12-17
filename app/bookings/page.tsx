@@ -138,8 +138,8 @@ export default function BookingsPage() {
                                     </div>
                                     <div className="p-2 bg-white rounded-lg flex items-center justify-center">
                                         <QRCode
-                                            value={`${typeof window !== 'undefined' ? window.location.origin : ''}/admin/verify/${booking.id}`}
-                                            size={64}
+                                            value={JSON.stringify({ id: booking.id, type: "ticket" })}
+                                            size={48} // Made slightly smaller visually but cleaner data
                                             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                                             viewBox={`0 0 256 256`}
                                         />

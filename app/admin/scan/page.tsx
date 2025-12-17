@@ -60,8 +60,17 @@ export default function ScanPage() {
     const handleScan = async (result: string) => {
         if (!result) return;
 
-        const match = result.match(/verify\/([^\/]+)$/);
-        const ticketId = match ? match[1] : result;
+        let ticketId = result;
+
+        // Try to parse JSON first (New Format)
+        try {
+            const parsed = JSON.parse(result);
+            if (parsed.id) ticketId = parsed.id;
+        } catch (e) {
+            // Fallback to Old Regex (URL format)
+            const match = result.match(/verify\/([^\/]+)$/);
+            if (match) ticketId = match[1];
+        }
 
         setScanningEnabled(false);
         setScannedResult(ticketId);
