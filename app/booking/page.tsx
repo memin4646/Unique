@@ -1,3 +1,4 @@
+"use client";
 // ... (imports remain the same)
 import React, { useState, useEffect, Suspense } from "react";
 import { ChevronLeft, Car, Truck, Check, Info, CreditCard, Calendar, Lock, Star, Percent } from "lucide-react";
