@@ -9,7 +9,7 @@ import { isValidLuhn } from "@/lib/validation";
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { cart, totalPrice, clearCart } = useCart();
+    const { cart, totalPrice, clearCart, removeFromCart } = useCart();
     const { addPoints, user } = useAuth();
 
     const [isProcessing, setIsProcessing] = useState(false);
@@ -132,7 +132,15 @@ export default function CheckoutPage() {
                 <div className="space-y-3">
                     {cartItems.map(item => (
                         <div key={item.id} className="flex justify-between text-sm">
-                            <span className="text-white">{item.quantity}x {item.name}</span>
+                            <div className="flex flex-col">
+                                <span className="text-white">{item.quantity}x {item.name}</span>
+                                <button
+                                    onClick={() => useCart().removeFromCart(item.id)}
+                                    className="text-red-400 text-[10px] font-bold text-left hover:text-red-300 transition w-fit mt-1"
+                                >
+                                    KALDIR
+                                </button>
+                            </div>
                             <span className="text-cinema-gold font-bold">{item.price === 0 ? "Ücretsiz" : `${item.price * item.quantity} ₺`}</span>
                         </div>
                     ))}
