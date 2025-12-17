@@ -1,4 +1,3 @@
-// ... imports
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
 import { ChevronLeft, Search, Filter, Loader2 } from "lucide-react";
