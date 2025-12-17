@@ -85,9 +85,12 @@ export default function ScanPage() {
                 setTicketData(data);
                 setFetchError(false);
             } else {
+                const errText = await res.text();
+                alert(`API Hatası: ${res.status} - ${errText}`);
                 setFetchError(true);
             }
-        } catch (e) {
+        } catch (e: any) {
+            alert(`Bağlantı Hatası: ${e.message}`);
             setFetchError(true);
         }
     };
