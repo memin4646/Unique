@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 1. Create User (unverified)
+        // 1. Create User (Verified immediately for convenience)
         const user = await prisma.user.create({
             data: {
                 name,
@@ -30,32 +30,14 @@ export async function POST(req: Request) {
                 password: hashedPassword,
                 points: 0,
                 isAdmin: false,
-                emailVerified: null, // Explicitly null
+                emailVerified: new Date(), // Auto-verified!
             },
         });
 
-        // 2. Generate OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        // OTP logic removed since we auto-verify
+        // await sendVerificationEmail(email, otp); 
 
-        // 3. Store OTP
-        // First clean old tokens for this email
-        await prisma.verificationToken.deleteMany({
-            where: { identifier: email },
-        });
-
-        await prisma.verificationToken.create({
-            data: {
-                identifier: email,
-                token: otp,
-                expires,
-            },
-        });
-
-        // 4. Send Email
-        await sendVerificationEmail(email, otp);
-
-        return NextResponse.json({ message: "Doğrulama maili gönderildi." });
+        return NextResponse.json({ message: "Kayıt başarılı! Giriş yapabilirsiniz." });
 
     } catch (error) {
         console.error(error);
