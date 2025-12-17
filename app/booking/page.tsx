@@ -1,5 +1,5 @@
-"use client";
-import React, { useState, useEffect } from "react";
+// ... (imports remain the same)
+import React, { useState, useEffect, Suspense } from "react";
 import { ChevronLeft, Car, Truck, Check, Info, CreditCard, Calendar, Lock, Star, Percent } from "lucide-react";
 import Link from "next/link";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
@@ -24,10 +24,7 @@ const ROWS = [
 ];
 const COLS = [1, 2, 3, 4, 5, 6, 7, 8];
 
-
-
-
-export default function BookingPage() {
+function BookingContent() {
     const router = useRouter();
     const { addToCart } = useCart();
     const searchParams = useSearchParams();
@@ -47,11 +44,11 @@ export default function BookingPage() {
     const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
     const [selectedPrice, setSelectedPrice] = useState<number>(0);
     const [selectedTier, setSelectedTier] = useState<SeatTier>("standard");
-    const [attendeeCount, setAttendeeCount] = useState<number>(1); // Added attendee count
+    const [attendeeCount, setAttendeeCount] = useState<number>(1);
     const [isProcessing, setIsProcessing] = useState(false);
     const [occupiedSlots, setOccupiedSlots] = useState<string[]>([]);
 
-    const [baseMoviePrice, setBaseMoviePrice] = useState<number>(200); // Renamed for clarity -> Movie Unit Price
+    const [baseMoviePrice, setBaseMoviePrice] = useState<number>(200);
 
     useEffect(() => {
         const fetchOccupiedSlots = async () => {
@@ -91,45 +88,28 @@ export default function BookingPage() {
     const calculatePrice = (base: number, count: number, tier: SeatTier) => {
         let total = base * count;
 
-        // 4 Person Discount
         if (count === 4) {
-            // Apply a discount (e.g., 100 TL off or custom logic)
-            // Let's assume the user meant "buy 3 get 4th free" or similar, 
-            // but the prompt was vague: "sadece 4 kişi olunca indirim olacak".
-            // I'll make it 100 TL discount for now as per plan, user can request changes.
-            // Example: 200 * 4 = 800 -> 700? Or specific fixed price?
-            // "1500 lira" example for 4 people vs 400 base suggests 1600 -> 1500.
-            total = (base * 4) - 100; // 100 TL discount for 4 pack
+            total = (base * 4) - 100;
         }
 
-        // Tier Pricing (Per person or Flat? Assuming Flat +50 for VIP based on previous logic simpilification)
-        // Re-reading user request: "bir kişilik ücret 400 iken 2 kişi olunca 800... 3 kişi 1200... 4 kişi 1500"
-        // This implies base price is PER PERSON.
-
         if (tier === "vip") {
-            total += (50 * count); // +50 per person for VIP
+            total += (50 * count);
         }
 
         return total;
     };
 
     const getSlotDetails = (rowId: string, colId: number): { tier: SeatTier, price: number, label: string } => {
-        // 1. Discount Rules: Side columns (1 & 8) OR Back Row (F)
         if (colId === 1 || colId === 8 || rowId === "F") {
-            // Economy logic? Keeping it same base price for simplicity or applying logic.
-            // User didn't specify economy difference in new prompt, so using base movie price.
             return { tier: "economy", price: calculatePrice(baseMoviePrice, attendeeCount, "economy"), label: "Ekonomik" };
         }
-        // 2. VIP Rules: Front/Middle Rows (A-C) (Center columns)
         if (["A", "B", "C"].includes(rowId)) {
             return { tier: "vip", price: calculatePrice(baseMoviePrice, attendeeCount, "vip"), label: "VIP Görüş" };
         }
-        // 3. Standard
         return { tier: "standard", price: calculatePrice(baseMoviePrice, attendeeCount, "standard"), label: "Standart" };
     };
 
     const handleSlotSelect = (rowId: string, colId: number) => {
-        // Validation Logic
         if (vehicle === "suv" && (rowId === "A" || rowId === "B")) {
             alert("SUV araçlar görüş açısını kapatmamak için ilk 2 sıraya park edemez.");
             return;
@@ -141,10 +121,8 @@ export default function BookingPage() {
         setSelectedTier(details.tier);
     };
 
-    // Auth for Points
     const { addPoints } = useAuth();
 
-    // Payment State
     const [cardForm, setCardForm] = useState({
         holderName: "",
         number: "",
@@ -156,23 +134,19 @@ export default function BookingPage() {
     const handleInputChange = (field: string, value: string) => {
         let formatted = value;
 
-        // Format Card Number
         if (field === "number") {
             formatted = value.replace(/\D/g, "").slice(0, 16);
             formatted = formatted.replace(/(\d{4})/g, "$1 ").trim();
         }
-        // Format Expiry
         if (field === "expiry") {
             formatted = value.replace(/\D/g, "").slice(0, 4);
             if (formatted.length >= 2) formatted = formatted.slice(0, 2) + "/" + formatted.slice(2);
         }
-        // Format CVC
         if (field === "cvc") {
             formatted = value.replace(/\D/g, "").slice(0, 3);
         }
 
         setCardForm(prev => ({ ...prev, [field]: formatted }));
-        // Clear error when user types
         if (errors[field]) setErrors(prev => ({ ...prev, [field]: "" }));
     };
 
@@ -181,7 +155,6 @@ export default function BookingPage() {
 
         if (!cardForm.holderName.trim()) newErrors.holderName = "Kart üzerindeki isim gerekli";
 
-        // Network Validation Check (Regex)
         const cleanNum = cardForm.number.replace(/\s/g, "");
 
         const NETWORKS = {
@@ -198,7 +171,6 @@ export default function BookingPage() {
         } else if (cleanNum.length < 15) {
             newErrors.number = "Eksik kart numarası";
         } else {
-            // Luhn Algorithm
             let sum = 0;
             let shouldDouble = false;
             for (let i = cleanNum.length - 1; i >= 0; i--) {
@@ -234,7 +206,6 @@ export default function BookingPage() {
         if (!validateForm()) return;
 
         setIsProcessing(true);
-        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
         setIsProcessing(false);
         setStep("confirm");
@@ -261,13 +232,11 @@ export default function BookingPage() {
             }
         });
 
-        // Redirect to Checkout directly
         router.push("/checkout");
     };
 
     return (
         <div className="min-h-screen bg-cinema-950 flex flex-col p-6 pb-24">
-            {/* Header */}
             <header className="flex flex-col gap-2 mb-8 z-50 relative">
                 <div className="flex items-center gap-4">
                     <button onClick={() => router.back()} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white">
@@ -287,7 +256,6 @@ export default function BookingPage() {
                 </div>
             </header>
 
-            {/* STEP 1: VEHICLE SELECTION */}
             {step === "vehicle" && (
                 <div className="flex-1 flex flex-col gap-6 relative z-10">
                     <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-xl flex gap-3 text-blue-200 text-sm">
@@ -330,7 +298,6 @@ export default function BookingPage() {
                 </div>
             )}
 
-            {/* STEP 1.5: ATTENDEE SELECTION (Moved inside Vehicle step or create new step? Keeping in vehicle step for flow) */}
             {step === "vehicle" && vehicle && (
                 <div className="fixed bottom-0 left-0 w-full p-6 bg-cinema-900 border-t border-white/10 z-30 animate-in slide-in-from-bottom">
                     <div className="max-w-md mx-auto">
@@ -370,10 +337,6 @@ export default function BookingPage() {
                 </div>
             )}
 
-            {/* Remove standard button from vehicle step since we added a new bottom sheet */}
-
-
-            {/* STEP 2: PARKING GRID */}
             {step === "parking" && (
                 <div className="flex-1 flex flex-col relative z-10 h-full">
 
@@ -393,7 +356,6 @@ export default function BookingPage() {
                 </div>
             )}
 
-            {/* STEP 3: PAYMENT */}
             {step === "payment" && (
                 <div className="flex-1 flex flex-col gap-6 relative z-10">
                     <div className="bg-gradient-to-br from-cinema-800 to-cinema-900 p-6 rounded-2xl border border-white/10 relative overflow-hidden">
@@ -480,7 +442,6 @@ export default function BookingPage() {
                 </div>
             )}
 
-            {/* STEP 4: CONFIRMATION */}
             {step === "confirm" && (
                 <div className="flex-1 flex flex-col items-center justify-center flex-1 text-center space-y-6">
                     <div className="w-24 h-24 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
@@ -519,5 +480,13 @@ export default function BookingPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function BookingPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-cinema-950 flex items-center justify-center text-white">Yükleniyor...</div>}>
+            <BookingContent />
+        </Suspense>
     );
 }

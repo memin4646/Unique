@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { Lock, ShieldCheck } from "lucide-react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const email = searchParams.get("email");
@@ -128,5 +128,13 @@ export default function ResetPasswordPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-cinema-950 flex items-center justify-center text-white">Yükleniyor...</div>}>
+            <ResetPasswordContent />
+        </Suspense>
     );
 }

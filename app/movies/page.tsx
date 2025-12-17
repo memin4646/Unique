@@ -1,5 +1,6 @@
+// ... imports
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { ChevronLeft, Search, Filter, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CinemaCard } from "@/components/ui/CinemaCard";
@@ -20,7 +21,7 @@ interface Movie {
 
 const CATEGORIES = ["Tümü", "Vizyondakiler", "Pek Yakında"];
 
-export default function MoviesPage() {
+function MoviesContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -143,5 +144,13 @@ export default function MoviesPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function MoviesPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-cinema-950 flex items-center justify-center text-white">Yükleniyor...</div>}>
+            <MoviesContent />
+        </Suspense>
     );
 }
