@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DriveInCinema</string>
+    <string name="title_activity_main">DriveInCinema</string>
+    <string name="package_name">com.drivein.cinema</string>
+    <string name="custom_url_scheme">com.drivein.cinema</string>
+</resources>

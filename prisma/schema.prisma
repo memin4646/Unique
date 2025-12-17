@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?  @unique
+  emailVerified DateTime?
+  image     String?
+  password  String?
+  phone     String?
+  points    Int      @default(0)
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tickets   Ticket[]
+  requests  MovieRequest[]
+  orders    Order[]
+  notifications Notification[]
+  accounts      Account[]
+  sessions      Session[]
+  quizAttempts  QuizAttempt[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?  // If null, it's a global notification for everyone
+  user      User?    @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  type      String   @default("info") // info, movie, ticket
+  actionUrl String?
+  createdAt DateTime @default(now())
+}
+
+model Ticket {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  movieId    String
+  movieTitle String
+  date       String
+  time       String
+  slot       String
+  vehicle    String
+  price      Float
+  attendeeCount Int      @default(1)
+  status     String   @default("active") // active, used, cancelled
+  createdAt  DateTime @default(now())
+}
+
+model MovieRequest {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  title     String
+  status    String   @default("pending") // pending, approved, rejected
+  createdAt DateTime @default(now())
+}
+
+model Movie {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  director    String
+  cast        Json
+  rating      Float
+  ticketPrice Float    @default(200.0)
+  duration    String
+  year        String
+  color       String
+  tags        String[]
+  trailerUrl  String
+  coverImage  String?
+  screenings  Screening[] @relation("MovieScreenings")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Screening {
+  id        String   @id @default(cuid())
+  movieId   String
+  movie     Movie    @relation("MovieScreenings", fields: [movieId], references: [id], onDelete: Cascade)
+  startTime DateTime
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  category    String // Food, Drink, Snack
+  image       String?
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SupportRequest {
+  id        String   @id @default(cuid())
+  type      String   // sos, message
+  title     String
+  message   String
+  location  String?
+  status    String   @default("pending") // pending, completed
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id])
+  items       OrderItem[]
+  totalAmount Float
+  status      String      @default("PENDING") // PENDING, PREPARING, DELIVERED, CANCELLED
+  location    String?     // e.g. "B-12" (Parking Slot)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  name      String  // Snapshotted name
+  price     Float   // Snapshotted price
+  quantity  Int
+}
+
+model Quiz {
+  id          String   @id @default(cuid())
+  question    String
+  options     Json     // Array of strings
+  correctAnswer String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  attempts    QuizAttempt[]
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  isCorrect Boolean
+  awardedPoints Int   @default(0)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, quizId]) // One attempt per quiz per user
+}
