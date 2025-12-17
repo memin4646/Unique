@@ -135,7 +135,7 @@ export default function CheckoutPage() {
                             <div className="flex flex-col">
                                 <span className="text-white">{item.quantity}x {item.name}</span>
                                 <button
-                                    onClick={() => useCart().removeFromCart(item.id)}
+                                    onClick={() => removeFromCart(item.id)}
                                     className="text-red-400 text-[10px] font-bold text-left hover:text-red-300 transition w-fit mt-1"
                                 >
                                     KALDIR
