@@ -60,6 +60,9 @@ export default function ScanPage() {
     const handleScan = async (result: string) => {
         if (!result) return;
 
+        // DEBUG: Show what was actually scanned
+        alert(`Taranan Veri: ${result}`);
+
         let ticketId = result;
 
         // Try to parse JSON first (New Format)
