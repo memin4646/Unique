@@ -1,4 +1,9 @@
 import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Unique",
+    description: "Drive-In Cinema Experience",
+};
 import "./globals.css";
 import { AppShell } from "@/components/ui/AppShell";
 import { Providers } from "@/components/Providers";

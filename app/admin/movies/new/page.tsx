@@ -182,7 +182,7 @@ export default function NewMoviePage() {
                 <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-gray-900 w-full max-w-2xl rounded-2xl border border-gray-800 flex flex-col max-h-[80vh]">
                         <div className="p-4 border-b border-gray-800 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-white">TMDB'den Film Ara</h3>
+                            <h3 className="text-lg font-bold text-white">TMDB&apos;den Film Ara</h3>
                             <button onClick={() => setShowSearchModal(false)} className="text-gray-400 hover:text-white">
                                 <X size={24} />
                             </button>
@@ -254,7 +254,7 @@ export default function NewMoviePage() {
                 <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
                     <h2 className="text-lg font-semibold text-white mb-4 border-b border-gray-800 pb-2 flex justify-between items-center">
                         <span>Gösterim Seansları</span>
-                        <span className="text-xs font-normal text-gray-400 bg-gray-800 px-2 py-1 rounded">Boş bırakılırsa "Pek Yakında" olur</span>
+                        <span className="text-xs font-normal text-gray-400 bg-gray-800 px-2 py-1 rounded">Boş bırakılırsa &quot;Pek Yakında&quot; olur</span>
                     </h2>
 
                     <div className="flex gap-2 mb-4">
@@ -287,7 +287,7 @@ export default function NewMoviePage() {
                                 </button>
                             </div>
                         ))}
-                        {screenings.length === 0 && <p className="text-gray-600 text-sm italic">Henüz seans eklenmedi. Film "Pek Yakında" olarak listelenecek.</p>}
+                        {screenings.length === 0 && <p className="text-gray-600 text-sm italic">Henüz seans eklenmedi. Film &quot;Pek Yakında&quot; olarak listelenecek.</p>}
                     </div>
                 </div>
 

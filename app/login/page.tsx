@@ -56,7 +56,7 @@ export default function LoginPage() {
                         <Car size={32} className="text-white" />
                     </div>
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                        Drive-In Prime
+                        Unique
                     </h1>
                     <p className="text-gray-400 mt-2 text-sm">Sinemanın yeni, konforlu hali.</p>
                 </div>

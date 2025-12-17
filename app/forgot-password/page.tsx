@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
 
             <div className="relative z-10 w-full max-w-sm mx-auto">
                 <Link href="/login" className="flex items-center text-gray-400 hover:text-white mb-8 transition gap-2">
-                    <ArrowLeft size={16} /> Giriş'e dön
+                    <ArrowLeft size={16} /> Giriş&apos;e dön
                 </Link>
 
                 <div className="text-center mb-8">

@@ -215,7 +215,7 @@ export default function EditMoviePage({ params }: { params: { slug: string } }) 
                 <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
                     <h2 className="text-lg font-semibold text-white mb-4 border-b border-gray-800 pb-2 flex justify-between items-center">
                         <span>Gösterim Seansları</span>
-                        <span className="text-xs font-normal text-gray-400 bg-gray-800 px-2 py-1 rounded">Boş bırakılırsa "Pek Yakında" olur</span>
+                        <span className="text-xs font-normal text-gray-400 bg-gray-800 px-2 py-1 rounded">Boş bırakılırsa &quot;Pek Yakında&quot; olur</span>
                     </h2>
 
                     <div className="flex gap-2 mb-4">
@@ -248,7 +248,7 @@ export default function EditMoviePage({ params }: { params: { slug: string } }) 
                                 </button>
                             </div>
                         ))}
-                        {screenings.length === 0 && <p className="text-gray-600 text-sm italic">Henüz seans eklenmedi. Film "Pek Yakında" olarak listelenecek.</p>}
+                        {screenings.length === 0 && <p className="text-gray-600 text-sm italic">Henüz seans eklenmedi. Film &quot;Pek Yakında&quot; olarak listelenecek.</p>}
                     </div>
                 </div>
 

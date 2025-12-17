@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.drivein.cinema',
-  appName: 'DriveInCinema',
+  appName: 'Unique',
   webDir: 'public',
   server: {
     url: 'http://192.168.1.105:3001',

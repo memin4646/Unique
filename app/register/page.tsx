@@ -64,7 +64,7 @@ export default function RegisterPage() {
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
                         Aramıza Katıl
                     </h1>
-                    <p className="text-gray-400 mt-2 text-sm">Drive-In Prime ayrıcalıklarını keşfet.</p>
+                    <p className="text-gray-400 mt-2 text-sm">Unique ayrıcalıklarını keşfet.</p>
                 </div>
 
                 <form onSubmit={handleRegister} className="space-y-4">

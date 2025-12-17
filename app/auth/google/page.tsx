@@ -43,7 +43,7 @@ export default function MockGoogleAuth() {
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
                     <h1 className="text-2xl font-medium pt-2">Oturum açın</h1>
-                    <p className="text-base">Drive-In Prime uygulamasına devam et</p>
+                    <p className="text-base">Unique uygulamasına devam et</p>
                 </div>
 
                 {step === 1 ? (
@@ -106,7 +106,7 @@ export default function MockGoogleAuth() {
 
                 {step === 2 && (
                     <div className="text-sm text-gray-500 pt-4">
-                        Drive-In Prime uygulamasının Google Hesabınıza erişmesine izin vermek için hesabınızı seçin.
+                        Unique uygulamasının Google Hesabınıza erişmesine izin vermek için hesabınızı seçin.
                     </div>
                 )}
             </div>
