@@ -1,3 +1,4 @@
+// ... imports
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -78,12 +79,26 @@ export default function NewMoviePage() {
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         setSearching(true);
+        // Reset results to avoid showing stale data or crash state
+        setSearchResults([]);
         try {
             const res = await fetch(`/api/tmdb/search?query=${searchQuery}`);
-            const data = await res.json();
-            setSearchResults(data);
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    setSearchResults(data);
+                } else {
+                    console.error("Unexpected data format from TMDB search:", data);
+                    setSearchResults([]);
+                }
+            } else {
+                console.error("TMDB Search failed", res.status, res.statusText);
+                const errData = await res.json().catch(() => ({}));
+                alert(`Arama başarısız: ${errData.error || "Bilinmeyen hata"}. TMDB API Anahtarını kontrol edin.`);
+            }
         } catch (error) {
-            console.error(error);
+            console.error("TMDB Fetch Error:", error);
+            alert("Bağlantı hatası oluştu.");
         } finally {
             setSearching(false);
         }
