@@ -43,7 +43,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
             {/* Bottom Navigation */}
             {!shouldHide && (
                 <nav className="fixed bottom-6 left-0 w-full z-[9999] px-6">
-                    <div className="max-w-md mx-auto bg-black/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-2 flex justify-between items-center shadow-2xl shadow-black/50 ring-1 ring-white/5">
+                    <div className="max-w-md mx-auto glass-panel rounded-3xl p-2 flex justify-between items-center ring-1 ring-white/5">
                         {navItems.map((item) => {
                             const isActive = pathname === item.href;
                             return (
@@ -57,7 +57,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
                                         <span className="absolute inset-0 bg-cinema-gold/10 blur-xl rounded-full" />
                                     )}
 
-                                    <div className={`relative transition-transform duration-300 ${isActive ? '-translate-y-1 scale-110' : 'group-hover:scale-105'}`}>
+                                    <div className={`relative transition-transform duration-300 ${isActive ? '-translate-y-1 scale-110 drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]' : 'group-hover:scale-105'}`}>
                                         {item.icon}
                                     </div>
 

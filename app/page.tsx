@@ -167,8 +167,8 @@ export default function Home() {
                 {/* Header */}
                 <header className="flex justify-center items-center pt-4 text-center">
                     <div>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400">
-                            Unique
+                        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-[#fce288] via-[#d4af37] to-[#aa8c2c] drop-shadow-sm tracking-wide">
+                            UNIQUE
                         </h1>
                         <p className="text-sm text-gray-400">Hoş geldin, {user?.name || "Misafir"}</p>
                     </div>
@@ -182,7 +182,7 @@ export default function Home() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Film, oyuncu veya tür ara..."
-                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cinema-500 transition-colors"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cinema-gold/50 transition-colors backdrop-blur-sm"
                     />
                 </div>
 
@@ -192,7 +192,7 @@ export default function Home() {
                         <button
                             key={i}
                             onClick={() => setSelectedCategory(cat)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === cat ? 'bg-cinema-500 text-white shadow-lg shadow-purple-900/50' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${selectedCategory === cat ? 'bg-cinema-gold text-black border-cinema-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]' : 'bg-transparent border-white/10 text-gray-400 hover:border-white/30'}`}
                         >
                             {cat}
                         </button>
@@ -227,19 +227,21 @@ export default function Home() {
                 </section>
 
                 {/* Quick Access */}
-                <section className="p-4 rounded-2xl bg-gradient-to-r from-cinema-800 to-fuchsia-900 border border-white/10 relative overflow-hidden">
+                <section className="p-5 rounded-2xl bg-gradient-to-br from-[#1a1a1a] via-black to-[#0a0a0a] border border-cinema-gold/20 relative overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-cinema-gold/10 blur-[50px] rounded-full pointer-events-none" />
                     <div className="relative z-10">
                         <h3 className="text-lg font-bold text-white mb-1">Mısırın Hazır mı?</h3>
                         <p className="text-xs text-gray-300 mb-3 max-w-[70%]">Film başlamadan siparişini ver, kapına gelsin.</p>
                         <Link href="/menu">
-                            <span className="inline-block px-4 py-2 bg-white text-black text-xs font-bold rounded-lg hover:bg-gray-200 transition">Sipariş Ver</span>
+                            <span className="inline-block px-5 py-2.5 bg-gradient-to-r from-[#d4af37] to-[#aa8c2c] text-black text-xs font-bold rounded-lg hover:brightness-110 transition shadow-[0_0_10px_rgba(212,175,55,0.3)]">Sipariş Ver</span>
                         </Link>
                     </div>
                     <Menu className="absolute -right-4 -bottom-4 text-white/10" size={100} />
                 </section>
 
                 {/* Request A Movie Section */}
-                <section className="p-4 rounded-2xl bg-gradient-to-br from-cinema-900 via-black to-cinema-950 border border-white/10">
+                <section className="p-5 rounded-2xl glass-panel border-gold-subtle relative overflow-hidden">
+                    <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-cinema-gold/5 blur-[60px] rounded-full pointer-events-none" />
                     <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 rounded-full bg-cinema-gold/10 flex items-center justify-center">
                             <Film className="text-cinema-gold" size={20} />
