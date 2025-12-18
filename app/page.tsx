@@ -168,7 +168,7 @@ export default function Home() {
                 <header className="flex justify-center items-center pt-4 text-center">
                     <div>
                         <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-[#fce288] via-[#d4af37] to-[#aa8c2c] drop-shadow-sm tracking-wide">
-                            UNIQUE
+                            Unique
                         </h1>
                         <p className="text-sm text-gray-400">Hoş geldin, {user?.name || "Misafir"}</p>
                     </div>
