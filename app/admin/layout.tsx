@@ -40,9 +40,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ];
 
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div className="min-h-screen text-white flex flex-col">
             {/* Top Navigation Bar */}
-            <header className="border-b border-white/10 bg-cinema-950 p-4 sticky top-0 z-50">
+            <header className="border-b border-white/10 glass-panel p-4 sticky top-0 z-50 rounded-b-xl">
                 <div className="max-w-6xl mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Shield className="text-cinema-500" />

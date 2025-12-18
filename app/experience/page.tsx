@@ -59,10 +59,10 @@ export default function ExperiencePage() {
     };
 
     return (
-        <div className="min-h-screen bg-neutral-950 flex flex-col relative overflow-hidden font-sans select-none text-white">
+        <div className="min-h-screen flex flex-col relative overflow-hidden font-sans select-none text-white">
 
-            {/* Retro Tuner Background */}
-            <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')]" />
+            {/* Retro Tuner Background - Removed old texture to show global Damask */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none" />
 
             {/* Top Bar */}
             <div className="relative z-10 p-6 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">

@@ -187,9 +187,9 @@ export default function MenuPage() {
     if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-cinema-gold"><Loader2 className="animate-spin" size={40} /></div>;
 
     return (
-        <div className="min-h-screen bg-cinema-950 flex flex-col relative pb-32">
+        <div className="min-h-screen flex flex-col relative pb-32">
             {/* Header */}
-            <div className="sticky top-0 z-20 bg-cinema-950/95 backdrop-blur-md p-6 border-b border-white/5">
+            <div className="sticky top-0 z-20 glass-panel border-b border-white/5 p-6 rounded-b-3xl">
                 <div className="flex items-center justify-between mb-4">
                     <button onClick={() => router.back()} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition">
                         <ChevronLeft />
