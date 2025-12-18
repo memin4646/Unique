@@ -60,8 +60,8 @@ export default function ScanPage() {
     const handleScan = async (result: string) => {
         if (!result) return;
 
-        // DEBUG: Show what was actually scanned
-        alert(`Taranan Veri: ${result}`);
+        // DEBUG: Show what was actually scanned - REMOVED
+        // alert(`Taranan Veri: ${result}`); 
 
         let ticketId = result;
 
@@ -85,12 +85,13 @@ export default function ScanPage() {
                 setTicketData(data);
                 setFetchError(false);
             } else {
-                const errText = await res.text();
-                alert(`API Hatası: ${res.status} - ${errText}`);
+                // Silent error log instead of alert
+                console.error("API Error", res.status);
                 setFetchError(true);
             }
         } catch (e: any) {
-            alert(`Bağlantı Hatası: ${e.message}`);
+            // Silent error log instead of alert
+            console.error("Fetch Error", e);
             setFetchError(true);
         }
     };
