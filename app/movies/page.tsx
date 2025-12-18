@@ -75,7 +75,7 @@ function MoviesContent() {
     });
 
     return (
-        <div className="min-h-screen bg-cinema-950 flex flex-col p-6 space-y-6">
+        <div className="min-h-screen flex flex-col p-6 space-y-6">
             {/* Header */}
             <header className="flex items-center gap-4">
                 <button onClick={() => router.back()} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition">
@@ -93,7 +93,7 @@ function MoviesContent() {
                         placeholder="Film ara..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cinema-500 transition-colors"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cinema-gold/50 transition-colors backdrop-blur-sm"
                     />
                 </div>
 
@@ -102,10 +102,10 @@ function MoviesContent() {
                         <button
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors 
+                            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all border 
                                 ${selectedCategory === cat
-                                    ? 'bg-cinema-500 text-white'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+                                    ? 'bg-cinema-gold text-black border-cinema-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                    : 'bg-transparent border-white/10 text-gray-400 hover:border-white/30'}`}
                         >
                             {cat}
                         </button>
@@ -121,7 +121,7 @@ function MoviesContent() {
                 </div>
 
                 {loading ? (
-                    <div className="flex items-center justify-center py-20 text-cinema-500">
+                    <div className="flex items-center justify-center py-20 text-cinema-gold">
                         <Loader2 className="animate-spin" size={40} />
                     </div>
                 ) : filteredMovies.length > 0 ? (
@@ -135,7 +135,7 @@ function MoviesContent() {
                         <p>Aradığınız kriterlere uygun film bulunamadı.</p>
                         <button
                             onClick={() => { setSelectedCategory("Tümü"); setSearchQuery(""); }}
-                            className="mt-4 text-cinema-400 underline"
+                            className="mt-4 text-cinema-gold underline hover:text-white transition-colors"
                         >
                             Filtreleri Temizle
                         </button>
@@ -148,7 +148,7 @@ function MoviesContent() {
 
 export default function MoviesPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-cinema-950 flex items-center justify-center text-white">Yükleniyor...</div>}>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white">Yükleniyor...</div>}>
             <MoviesContent />
         </Suspense>
     );
