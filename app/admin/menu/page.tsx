@@ -1,11 +1,12 @@
 
 "use client";
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, Tag, DollarSign, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Tag, DollarSign, Image as ImageIcon, Edit, Loader2 } from "lucide-react";
 
 interface Product {
     id: string;
     name: string;
+    description: string;
     price: number;
     category: string;
     image?: string;
@@ -15,6 +16,7 @@ export default function AdminMenuPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -40,19 +42,39 @@ export default function AdminMenuPage() {
 
     useEffect(() => { fetchProducts(); }, []);
 
+    const resetForm = () => {
+        setFormData({ name: "", description: "", price: "", category: "food", image: "" });
+        setEditingProduct(null);
+        setShowForm(false);
+    };
+
+    const handleEditClick = (product: Product) => {
+        setFormData({
+            name: product.name,
+            description: product.description || "",
+            price: product.price.toString(),
+            category: product.category,
+            image: product.image || ""
+        });
+        setEditingProduct(product);
+        setShowForm(true);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch("/api/products", {
-                method: "POST",
+            const url = editingProduct ? `/api/products/${editingProduct.id}` : "/api/products";
+            const method = editingProduct ? "PATCH" : "POST";
+
+            const res = await fetch(url, {
+                method,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
             });
 
             if (res.ok) {
                 fetchProducts();
-                setShowForm(false);
-                setFormData({ name: "", description: "", price: "", category: "food", image: "" });
+                resetForm();
             } else {
                 alert("Hata oluştu");
             }
@@ -63,24 +85,39 @@ export default function AdminMenuPage() {
 
     const handleDelete = async (id: string) => {
         if (!confirm("Bu ürünü silmek istediğinize emin misiniz?")) return;
-        // Basic delete implementation could be added to API
+        try {
+            const res = await fetch(`/api/products/${id}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                fetchProducts();
+            } else {
+                alert("Silme işlemi başarısız");
+            }
+        } catch (error) {
+            console.error("Delete failed", error);
+        }
     };
+
+    if (loading) return <div className="text-white flex items-center gap-2"><Loader2 className="animate-spin" /> Yükleniyor...</div>;
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold text-white">Menü Yönetimi</h1>
                 <button
-                    onClick={() => setShowForm(!showForm)}
+                    onClick={() => { resetForm(); setShowForm(!showForm); }}
                     className="bg-cinema-500 hover:bg-cinema-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition"
                 >
-                    <Plus size={20} /> Yeni Ürün Ekle
+                    <Plus size={20} /> {showForm && !editingProduct ? 'İptal' : 'Yeni Ürün Ekle'}
                 </button>
             </div>
 
             {showForm && (
                 <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 animate-in slide-in-from-top-4">
-                    <h3 className="text-lg font-bold text-white mb-4">Yeni Ürün Bilgileri</h3>
+                    <h3 className="text-lg font-bold text-white mb-4">
+                        {editingProduct ? 'Ürünü Düzenle' : 'Yeni Ürün Bilgileri'}
+                    </h3>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input required placeholder="Ürün Adı (örn: Hamburger)" className="bg-gray-800 border-gray-700 rounded-lg p-3 text-white w-full"
@@ -109,8 +146,10 @@ export default function AdminMenuPage() {
                             value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
 
                         <div className="flex justify-end gap-2">
-                            <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-white px-4">İptal</button>
-                            <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-500">Kaydet</button>
+                            <button type="button" onClick={resetForm} className="text-gray-400 hover:text-white px-4">İptal</button>
+                            <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-500">
+                                {editingProduct ? 'Güncelle' : 'Kaydet'}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -118,7 +157,7 @@ export default function AdminMenuPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map(product => (
-                    <div key={product.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex gap-4 group hover:border-cinema-500/50 transition">
+                    <div key={product.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex gap-4 group hover:border-cinema-500/50 transition relative">
                         <div className="w-24 h-24 bg-gray-800 rounded-lg overflow-hidden shrink-0">
                             {product.image ? (
                                 <img src={product.image} className="w-full h-full object-cover" />
@@ -126,10 +165,26 @@ export default function AdminMenuPage() {
                         </div>
                         <div className="flex-1">
                             <div className="flex justify-between items-start">
-                                <h3 className="text-lg font-bold text-white">{product.name}</h3>
-                                <span className="bg-gray-800 text-cinema-gold px-2 py-1 rounded text-xs font-bold">{product.price} TL</span>
+                                <h3 className="text-lg font-bold text-white line-clamp-1">{product.name}</h3>
+                                <span className="bg-gray-800 text-cinema-gold px-2 py-1 rounded text-xs font-bold whitespace-nowrap">{product.price} TL</span>
                             </div>
                             <p className="text-sm text-gray-400 mt-1 capitalize">{product.category}</p>
+                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">{product.description}</p>
+
+                            <div className="mt-3 flex gap-2">
+                                <button
+                                    onClick={() => handleEditClick(product)}
+                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white text-xs py-2 rounded-lg font-bold flex items-center justify-center gap-2 transition"
+                                >
+                                    <Edit size={14} /> Düzenle
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(product.id)}
+                                    className="w-8 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg flex items-center justify-center transition"
+                                >
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
