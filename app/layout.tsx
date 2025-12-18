@@ -25,9 +25,9 @@ export default function RootLayout({
                             {/* max-w-md ensures mobile view even on desktop */}
                             <AppShell>{children}</AppShell>
 
-                            {/* Version Indicator - Temporary Debug */}
-                            <div className="fixed bottom-1 left-1 text-[10px] text-gray-500 z-[9999] opacity-30 select-none pointer-events-none">
-                                v1.2
+                            {/* Version Indicator - High Visibility Debug */}
+                            <div className="fixed top-2 left-2 px-2 py-1 bg-red-600 text-white text-xs font-bold rounded z-[99999] shadow-lg pointer-events-none opacity-80">
+                                v1.3
                             </div>
                         </main>
                     </RadioProvider>
