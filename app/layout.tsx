@@ -21,7 +21,7 @@ export default function RootLayout({
                 <Providers>
                     <RadioProvider>
                         {/* Main Content */}
-                        <main className="w-full max-w-md mx-auto min-h-screen relative shadow-2xl shadow-black bg-cinema-950">
+                        <main className="w-full max-w-md mx-auto min-h-screen relative shadow-2xl shadow-black">
                             {/* max-w-md ensures mobile view even on desktop */}
                             <AppShell>{children}</AppShell>
                         </main>
