@@ -83,7 +83,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh, childre
                 animate={controls}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{ y: pullY }}
-                className="relative z-10 bg-black min-h-screen"
+                className="relative z-10 min-h-screen"
             >
                 {children}
             </motion.div>

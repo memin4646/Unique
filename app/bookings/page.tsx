@@ -87,7 +87,7 @@ export default function BookingsPage() {
     const [expandedTicket, setExpandedTicket] = useState<any | null>(null);
 
     return (
-        <div className="min-h-screen bg-cinema-950 flex flex-col p-6 space-y-6">
+        <div className="min-h-screen flex flex-col p-6 space-y-6">
             {/* Header */}
             <header className="flex items-center gap-4">
                 <button onClick={() => router.back()} className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition">
