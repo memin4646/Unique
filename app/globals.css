@@ -12,28 +12,24 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #050505;
+  /* Lüks, Derinlikli Arka Plan - Enhanced Visibility */
+  background-color: #0c0c0c !important;
+  /* Slightly lighter black to show contrast */
 
-  /* Lüks, Derinlikli Arka Plan */
   background-image:
-    /* 1. incecik, zarif bir gürültü (noise) dokusu - kalite hissi verir */
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+    /* 1. Altın Vinyet (Daha Güçlü) - Öne aldım */
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.4) 0%, transparent 80%),
 
-    /* 2. Altın Işıltılı Vinyet (Merkezden dışa koyulaşma) */
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-
-    /* 3. Çok hafif geometrik Art Deco desen (Opsiyonel ama şık durur) */
-    linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    /* 2. Izgara Deseni (Daha Belirgin) */
+    linear-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.08) 1px, transparent 1px) !important;
 
   background-size:
-    200px 200px,
-    /* Noise */
     100% 100%,
     /* Vignette */
-    40px 40px,
-    /* Grid Vertical */
-    40px 40px;
+    60px 60px,
+    /* Grid Vertical - Daha geniş */
+    60px 60px !important;
   /* Grid Horizontal */
 
   background-attachment: fixed;
