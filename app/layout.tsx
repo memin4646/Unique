@@ -24,11 +24,6 @@ export default function RootLayout({
                         <main className="w-full max-w-md mx-auto min-h-screen relative shadow-2xl shadow-black">
                             {/* max-w-md ensures mobile view even on desktop */}
                             <AppShell>{children}</AppShell>
-
-                            {/* Version Indicator - High Visibility Debug */}
-                            <div className="fixed top-2 left-2 px-2 py-1 bg-red-600 text-white text-xs font-bold rounded z-[99999] shadow-lg pointer-events-none opacity-80">
-                                v1.3
-                            </div>
                         </main>
                     </RadioProvider>
                 </Providers>

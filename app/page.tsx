@@ -176,7 +176,7 @@ export default function Home() {
 
                 {/* Search Bar */}
                 <div className="relative">
-                    <Search className="absolute left-4 top-3.5 text-gray-500" size={20} />
+                    <Search className="absolute left-4 top-3.5 text-gray-400 z-10" size={20} />
                     <input
                         type="text"
                         value={searchQuery}
