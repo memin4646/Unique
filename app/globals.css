@@ -4,39 +4,75 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 20, 20, 20;
+  --background-start-rgb: 5, 5, 5;
+  --background-end-rgb: 0, 0, 0;
+  --cinema-gold: #D4AF37;
+  --cinema-gold-dim: #997f25;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #000000;
-  /* Premium Gold Mesh Pattern */
+  background-color: #050505;
+
+  /* Lüks, Derinlikli Arka Plan */
   background-image:
-    radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.15) 0%, transparent 40%),
-    /* Top Gold Light Leak */
-    radial-gradient(rgba(212, 175, 55, 0.15) 1px, transparent 1px);
-  /* Gold Micro-Dots */
-  background-size: 100% 100%, 32px 32px;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* 1. incecik, zarif bir gürültü (noise) dokusu - kalite hissi verir */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+
+    /* 2. Altın Işıltılı Vinyet (Merkezden dışa koyulaşma) */
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+
+    /* 3. Çok hafif geometrik Art Deco desen (Opsiyonel ama şık durur) */
+    linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+
+  background-size:
+    200px 200px,
+    /* Noise */
+    100% 100%,
+    /* Vignette */
+    40px 40px,
+    /* Grid Vertical */
+    40px 40px;
+  /* Grid Horizontal */
+
+  background-attachment: fixed;
+  /* Mobilde sabit kalsın, içerik kaysın */
   min-height: 100vh;
 }
 
-/* Custom Scrollbar for a premium feel */
+/* Luxury Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(to bottom, #7a6020, #d4af37);
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+/* Glassmorphism Classes Utility */
+.glass-panel {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.text-gold {
+  color: #D4AF37;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.border-gold-subtle {
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #997f25 0%, #D4AF37 50%, #fce288 100%);
 }
