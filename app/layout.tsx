@@ -17,7 +17,19 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="tr">
-            <body className="antialiased min-h-screen pb-20 overflow-x-hidden">
+            <body
+                className="antialiased min-h-screen pb-20 overflow-x-hidden"
+                style={{
+                    backgroundColor: "#080808",
+                    backgroundImage: `
+                        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.3) 0%, transparent 70%),
+                        linear-gradient(rgba(212, 175, 55, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(212, 175, 55, 0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: "100% 100%, 50px 50px, 50px 50px",
+                    backgroundAttachment: "fixed"
+                }}
+            >
                 <Providers>
                     <RadioProvider>
                         {/* Main Content */}
