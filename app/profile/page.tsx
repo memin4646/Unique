@@ -32,6 +32,14 @@ export default function ProfilePage() {
     }
 
     return (
+    const [showMail, setShowMail] = useState(false);
+    const [showPhone, setShowPhone] = useState(false);
+
+    // ... (existing effects) ...
+
+    // ... (existing helper functions) ...
+
+    return (
         <div className="min-h-screen text-white pb-20 pt-24 px-4">
             <div className="max-w-md mx-auto space-y-8">
                 {/* Header */}
@@ -104,24 +112,37 @@ export default function ProfilePage() {
 
                 {/* Support */}
                 <div className="grid grid-cols-2 gap-4">
-                    <a
-                        href="mailto:destek@driveincinema.com"
-                        className="bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group"
+                    <button
+                        onClick={() => {
+                            if (showMail) window.location.href = "mailto:destek@driveincinema.com";
+                            else setShowMail(true);
+                        }}
+                        className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showMail ? 'bg-blue-600 border-blue-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
                     >
-                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition">
-                            <Mail size={20} className="text-blue-500" />
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showMail ? 'bg-white text-blue-600' : 'bg-blue-500/10 text-blue-500 group-hover:scale-110'}`}>
+                            <Mail size={20} />
                         </div>
-                        <span className="font-bold text-sm">Bize Ulaşın</span>
-                    </a>
-                    <a
-                        href="tel:4440000"
-                        className="bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group"
+                        <span className={`font-bold text-sm text-center transition-all ${showMail ? 'text-white' : 'text-gray-200'}`}>
+                            {showMail ? "destek@driveincinema.com" : "Bize Ulaşın"}
+                        </span>
+                        {showMail && <span className="text-[10px] text-blue-100 opacity-80">(Mail Gönder)</span>}
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            if (showPhone) window.location.href = "tel:08501234567";
+                            else setShowPhone(true);
+                        }}
+                        className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showPhone ? 'bg-green-600 border-green-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
                     >
-                        <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition">
-                            <Phone size={20} className="text-green-500" />
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showPhone ? 'bg-white text-green-600' : 'bg-green-500/10 text-green-500 group-hover:scale-110'}`}>
+                            <Phone size={20} />
                         </div>
-                        <span className="font-bold text-sm">Bizi Arayın</span>
-                    </a>
+                        <span className={`font-bold text-sm text-center transition-all ${showPhone ? 'text-white' : 'text-gray-200'}`}>
+                            {showPhone ? "0850 123 45 67" : "Bizi Arayın"}
+                        </span>
+                        {showPhone && <span className="text-[10px] text-green-100 opacity-80">(Hemen Ara)</span>}
+                    </button>
                 </div>
 
                 {/* Notifications & Logout */}
