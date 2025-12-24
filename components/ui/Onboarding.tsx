@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 const slides = [
     {
         id: 1,
         title: "Sinemayı Aracına Getirdik",
         description: "Biletini al, en iyi yere park et ve koltuğuna yaslan. Yıldızların altında sinema keyfi seni bekliyor.",
-        image: "/onboarding/1.png" // Placeholder, user needs to move generated images here
+        image: "/onboarding/1.png"
     },
     {
         id: 2,
@@ -43,8 +42,43 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
         }
     };
 
+    // Touch Handling
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+    // Minimum swipe distance (in px)
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null); // Reset
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isLeftSwipe) {
+            nextSlide();
+        }
+        if (isRightSwipe) {
+            prevSlide();
+        }
+    };
+
     return (
-        <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-12 pt-0">
+        <div
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-12 pt-0"
+        >
             {/* Image Area (Top 45%) - Reduced to give more space below */}
             <div className="w-full h-[45vh] relative flex-shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black z-10" />
@@ -69,7 +103,7 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
 
             {/* Content Area (Bottom 55%) */}
             <div className="w-full px-8 flex flex-col items-center text-center z-20 flex-1 justify-between max-w-md pb-10">
-                <div className="mt-8 space-y-4">
+                <div className="mt-8 space-y-4 select-none">
                     <h1 className="text-3xl font-bold text-cinema-100 leading-tight">
                         {slides[currentSlide].title}
                     </h1>
@@ -89,25 +123,18 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
                         ))}
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex items-center gap-3">
-                        {currentSlide > 0 && (
-                            <button
-                                onClick={prevSlide}
-                                className="w-14 h-14 bg-white/10 hover:bg-white/20 text-white rounded-2xl flex items-center justify-center transition-all active:scale-95"
-                            >
-                                <ChevronRight className="rotate-180" size={24} />
-                            </button>
-                        )}
+                    {/* Button - Single Main Button */}
+                    <button
+                        onClick={nextSlide}
+                        className="w-full bg-cinema-600 hover:bg-cinema-500 text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                    >
+                        {currentSlide === slides.length - 1 ? 'Başla' : 'Devam Et'}
+                        <ChevronRight size={20} />
+                    </button>
 
-                        <button
-                            onClick={nextSlide}
-                            className="flex-1 bg-cinema-600 hover:bg-cinema-500 text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                        >
-                            {currentSlide === slides.length - 1 ? 'Başla' : 'Devam Et'}
-                            <ChevronRight size={20} />
-                        </button>
-                    </div>
+                    <p className="text-xs text-gray-600 animate-pulse">
+                        {currentSlide === 0 ? "Kaydırarak keşfet >>" : "<<"}
+                    </p>
                 </div>
             </div>
         </div>
