@@ -8,6 +8,7 @@ import "./globals.css";
 import { AppShell } from "@/components/ui/AppShell";
 import { Providers } from "@/components/Providers";
 import { FloatingCart } from "@/components/ui/FloatingCart";
+import { NotificationPermissionModal } from "@/components/ui/NotificationPermissionModal";
 
 import { RadioProvider } from "@/context/RadioContext";
 
@@ -26,6 +27,7 @@ export default function RootLayout({
                             {/* max-w-md ensures mobile view even on desktop */}
                             <AppShell>{children}</AppShell>
                             <FloatingCart />
+                            <NotificationPermissionModal />
                         </main>
                     </RadioProvider>
                 </Providers>

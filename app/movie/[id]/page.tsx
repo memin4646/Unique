@@ -5,6 +5,7 @@ import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { TrailerPlayer } from "@/components/ui/TrailerPlayer";
 import { prisma } from "@/lib/prisma";
 import { BookingBar } from "./BookingBar";
+import { ShareButton } from "@/components/ui/ShareButton";
 
 interface CastMember {
     name: string;
@@ -54,6 +55,15 @@ export default async function MovieDetail({ params }: { params: { id: string } }
                 <Link href="/" className="absolute top-6 left-6 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/60 transition z-50">
                     <ChevronLeft size={24} />
                 </Link>
+
+                {/* Share Button */}
+                <div className="absolute top-6 right-6 z-50">
+                    <ShareButton
+                        title={`Unique Sinema: ${movie.title}`}
+                        text={`${movie.title} filmini Unique Drive-In Cinema'da izlemelisin!`}
+                        className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60"
+                    />
+                </div>
             </div>
 
             {/* Content */}
