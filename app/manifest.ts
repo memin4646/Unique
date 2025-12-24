@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'Lüks arabalı sinema deneyimi.',
         start_url: '/',
         display: 'standalone',
-        background_color:= '#000000',
+        background_color: '#000000',
         theme_color: '#d4af37',
         orientation: 'portrait',
         icons: [
