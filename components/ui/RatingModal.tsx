@@ -42,20 +42,19 @@ export const RatingModal: React.FC<RatingModalProps> = ({ movieTitle, onClose, o
     }
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in slide-in-from-bottom-10 sm:fade-in duration-300">
-            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in slide-in-from-bottom-10 sm:fade-in duration-300">
+            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[80vh] flex flex-col shadow-2xl">
 
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-white transition z-10">
                     <X size={24} />
                 </button>
 
-                <div className="text-center mb-6 shrink-0">
-                    <span className="text-xs font-bold text-cinema-500 tracking-widest uppercase mb-2 block">Deneyimini Puanla</span>
-                    <h2 className="text-2xl font-black text-white leading-tight">{movieTitle}</h2>
-                    <p className="text-gray-400 text-xs mt-1">Umarız keyifli vakit geçirmişsindir.</p>
+                <div className="text-center mb-4 shrink-0 mt-2">
+                    <span className="text-xs font-bold text-cinema-500 tracking-widest uppercase mb-1 block">Deneyimini Puanla</span>
+                    <h2 className="text-xl font-black text-white leading-tight truncate px-4">{movieTitle}</h2>
                 </div>
 
-                <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 mb-6">
+                <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 mb-4 px-1">
                     {/* Movie Rating */}
                     <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                         <label className="text-sm font-bold text-white mb-3 block flex items-center gap-2">
@@ -99,15 +98,16 @@ export const RatingModal: React.FC<RatingModalProps> = ({ movieTitle, onClose, o
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder="Eklemek istediğiniz bir not var mı?"
-                            className="w-full h-24 bg-white/5 border border-white/10 rounded-2xl p-4 pl-12 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cinema-500 transition resize-none"
+                            className="w-full h-20 bg-white/5 border border-white/10 rounded-2xl p-4 pl-12 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cinema-500 transition resize-none"
                         />
                     </div>
                 </div>
 
-                <div className="shrink-0 pt-2">
+                <div className="shrink-0 pt-2 pb-6 sm:pb-0">
                     <ButtonPrimary
                         onClick={handleSubmit}
                         disabled={movieRating === 0 || serviceRating === 0}
+                        className="w-full shadow-lg shadow-cinema-500/20"
                     >
                         Puanı Gönder
                     </ButtonPrimary>
