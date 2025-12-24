@@ -92,7 +92,8 @@ export default function MenuPage() {
         });
 
     const handleAddToCartClick = (item: any) => {
-        if (item.name.toLowerCase().includes("sahne sizin")) {
+        // Check by category OR name to be safe
+        if (item.category === 'service' || item.name.toLowerCase().includes("sahne")) {
             setSelectedServiceId(item.id);
             setCustomMessage("");
             setShowMessageModal(true);
