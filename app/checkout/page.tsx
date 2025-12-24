@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle, Trash2, Plus, Minus } from "lucide-react";
+import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle, Trash2, Plus, Minus, ShieldCheck } from "lucide-react";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { isValidLuhn } from "@/lib/validation";
 
@@ -186,9 +186,22 @@ export default function CheckoutPage() {
 
             {/* Payment Form */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-4">
-                <h3 className="text-gray-400 text-xs font-bold uppercase mb-2 flex items-center gap-2">
-                    <Lock size={12} /> Güvenli Ödeme
-                </h3>
+                <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-gray-400 text-xs font-bold uppercase flex items-center gap-2">
+                        <Lock size={12} /> Güvenli Ödeme
+                    </h3>
+                    {/* Security Badges */}
+                    <div className="flex items-center gap-2 opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+                        <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded border border-white/10">
+                            <ShieldCheck size={12} className="text-green-500" />
+                            <span className="text-[9px] font-bold text-gray-300">3D Secure</span>
+                        </div>
+                        <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded border border-white/10">
+                            <Lock size={12} className="text-cinema-gold" />
+                            <span className="text-[9px] font-bold text-gray-300">SSL 256-Bit</span>
+                        </div>
+                    </div>
+                </div>
 
                 {/* Holder Name */}
                 <div>
@@ -258,7 +271,14 @@ export default function CheckoutPage() {
                 </div>
             </div>
 
-            <div className="mt-auto pt-6">
+            {/* Policies */}
+            <div className="text-center mt-6 mb-4">
+                <p className="text-[10px] text-gray-500">
+                    Ödeme yaparak <a href="/policies/payment" className="underline hover:text-white">Ödeme Güvenliği</a>, <a href="/policies/refund" className="underline hover:text-white">İade Koşulları</a> ve <a href="/policies/privacy" className="underline hover:text-white">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+                </p>
+            </div>
+
+            <div className="mt-auto pt-2">
                 <ButtonPrimary onClick={handlePayment} disabled={isProcessing} className="w-full text-lg h-14">
                     {isProcessing ? (
                         <span className="flex items-center gap-2">
@@ -269,6 +289,12 @@ export default function CheckoutPage() {
                         `Ödeme Yap (${totalPrice} ₺)`
                     )}
                 </ButtonPrimary>
+            </div>
+
+            {/* Footer Logos - Optional Touch */}
+            <div className="flex justify-center gap-4 mt-6 opacity-30 grayscale">
+                <div className="h-4 bg-white/50 w-8 rounded"></div> {/* Visa Mock */}
+                <div className="h-4 bg-white/50 w-8 rounded"></div> {/* MC Mock */}
             </div>
         </div>
     );
