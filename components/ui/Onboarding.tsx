@@ -38,22 +38,24 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
     };
 
     return (
-        <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-12 pt-0">
-            {/* Image Area (Top 60%) */}
-            <div className="w-full h-[60vh] relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black z-10" />
+        <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-32 pt-0">
+            {/* Image Area (Top 55%) */}
+            <div className="w-full h-[55vh] relative flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black z-10" />
                 {/* Images are mapped to avoid flicker, using opacity for transition */}
                 {slides.map((slide, index) => (
                     <div
                         key={slide.id}
                         className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
                     >
-                        {/* Note: In a real scenario, we use next/image. For now using img to allow local file references easily if needed during dev without public folder reload issues, but switching to next/image best practice */}
                         <div className="w-full h-full bg-cinema-900 relative overflow-hidden">
-                            {/* Placeholder for the generated images user will place */}
-                            <div className="absolute inset-0 flex items-center justify-center text-cinema-700 opacity-20 text-9xl font-black">
-                                {index + 1}
-                            </div>
+                            <Image
+                                src={slide.image}
+                                alt={slide.title}
+                                fill
+                                className="object-cover"
+                                priority={index === 0}
+                            />
                         </div>
                     </div>
                 ))}
