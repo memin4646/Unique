@@ -186,19 +186,19 @@ export default function CheckoutPage() {
 
             {/* Payment Form */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-4">
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex justify-between items-start mb-4">
                     <h3 className="text-gray-400 text-xs font-bold uppercase flex items-center gap-2">
                         <Lock size={12} /> Güvenli Ödeme
                     </h3>
-                    {/* Security Badges */}
-                    <div className="flex items-center gap-2 opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
-                        <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded border border-white/10">
-                            <ShieldCheck size={12} className="text-green-500" />
-                            <span className="text-[9px] font-bold text-gray-300">3D Secure</span>
+                    {/* Security Badges - High Visibility */}
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 bg-green-500/20 px-2 py-1.5 rounded-lg border border-green-500/30 shadow-sm">
+                            <ShieldCheck size={14} className="text-green-500" />
+                            <span className="text-[10px] font-bold text-green-100">3D Secure</span>
                         </div>
-                        <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded border border-white/10">
-                            <Lock size={12} className="text-cinema-gold" />
-                            <span className="text-[9px] font-bold text-gray-300">SSL 256-Bit</span>
+                        <div className="flex items-center gap-1 bg-yellow-500/20 px-2 py-1.5 rounded-lg border border-yellow-500/30 shadow-sm">
+                            <Lock size={14} className="text-yellow-500" />
+                            <span className="text-[10px] font-bold text-yellow-100">SSL 256-Bit</span>
                         </div>
                     </div>
                 </div>
@@ -272,9 +272,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* Policies */}
-            <div className="text-center mt-6 mb-4">
-                <p className="text-[10px] text-gray-500">
-                    Ödeme yaparak <a href="/policies/payment" className="underline hover:text-white">Ödeme Güvenliği</a>, <a href="/policies/refund" className="underline hover:text-white">İade Koşulları</a> ve <a href="/policies/privacy" className="underline hover:text-white">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+            <div className="text-center mt-8 mb-6 p-4 bg-white/5 rounded-xl border border-white/5">
+                <p className="text-xs text-gray-400 leading-relaxed">
+                    Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
                 </p>
             </div>
 
