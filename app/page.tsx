@@ -5,6 +5,7 @@ import { Film, Ticket, Car, Menu, Search, Check, Loader2 } from "lucide-react";
 import { CinemaCard } from "@/components/ui/CinemaCard";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { RatingModal } from "@/components/ui/RatingModal";
+import Onboarding from "@/components/ui/Onboarding";
 import { QuizModal } from "@/components/ui/QuizModal";
 import { useAuth } from "@/context/AuthContext";
 
@@ -25,6 +26,21 @@ interface Movie {
 import { PullToRefresh } from "@/components/ui/PullToRefresh";
 
 export default function Home() {
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
+    useEffect(() => {
+        // Check if onboarding was seen
+        const seen = localStorage.getItem('onboarding_seen');
+        if (!seen) {
+            setShowOnboarding(true);
+        }
+    }, []);
+
+    const finishOnboarding = () => {
+        setShowOnboarding(false);
+        localStorage.setItem('onboarding_seen', 'true');
+    };
+
     const { user } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Vizyondakiler");
