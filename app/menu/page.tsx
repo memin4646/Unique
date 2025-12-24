@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ShoppingBag, Plus, CreditCard, Loader2, CheckCircle, Calendar, Lock, Star } from "lucide-react";
+import { ChevronLeft, ShoppingBag, Plus, CreditCard, Loader2, CheckCircle, Calendar, Lock, Star, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { useAuth } from "@/context/AuthContext";
@@ -349,6 +349,23 @@ export default function MenuPage() {
                         {checkoutStep === "payment" && (
                             <>
                                 <div className="space-y-4 mb-6 flex-1 overflow-y-auto">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h3 className="text-gray-400 text-xs font-bold uppercase flex items-center gap-2">
+                                            <Lock size={12} /> Güvenli Ödeme
+                                        </h3>
+                                        {/* Security Badges */}
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1 bg-green-500/20 px-2 py-1.5 rounded-lg border border-green-500/30 shadow-sm">
+                                                <ShieldCheck size={14} className="text-green-500" />
+                                                <span className="text-[10px] font-bold text-green-100">3D Secure</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 bg-yellow-500/20 px-2 py-1.5 rounded-lg border border-yellow-500/30 shadow-sm">
+                                                <Lock size={14} className="text-yellow-500" />
+                                                <span className="text-[10px] font-bold text-yellow-100">SSL 256-Bit</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {/* Card Holder */}
                                     <div className="space-y-2">
                                         <label className="text-xs text-gray-400 ml-1">Kart Üzerindeki İsim</label>
@@ -408,6 +425,13 @@ export default function MenuPage() {
                                                 />
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Policies Modal */}
+                                    <div className="text-center mt-6 p-3 bg-white/5 rounded-xl border border-white/5">
+                                        <p className="text-[10px] text-gray-400 leading-relaxed">
+                                            Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+                                        </p>
                                     </div>
                                 </div>
 
