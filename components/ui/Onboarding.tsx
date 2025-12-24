@@ -37,10 +37,16 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
         }
     };
 
+    const prevSlide = () => {
+        if (currentSlide > 0) {
+            setCurrentSlide(currentSlide - 1);
+        }
+    };
+
     return (
-        <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-32 pt-0">
-            {/* Image Area (Top 55%) */}
-            <div className="w-full h-[55vh] relative flex-shrink-0">
+        <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-between pb-12 pt-0">
+            {/* Image Area (Top 45%) - Reduced to give more space below */}
+            <div className="w-full h-[45vh] relative flex-shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black z-10" />
                 {/* Images are mapped to avoid flicker, using opacity for transition */}
                 {slides.map((slide, index) => (
@@ -61,9 +67,9 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
                 ))}
             </div>
 
-            {/* Content Area (Bottom 40%) */}
-            <div className="w-full px-8 flex flex-col items-center text-center z-20 flex-1 justify-between max-w-md">
-                <div className="mt-4 space-y-4">
+            {/* Content Area (Bottom 55%) */}
+            <div className="w-full px-8 flex flex-col items-center text-center z-20 flex-1 justify-between max-w-md pb-10">
+                <div className="mt-8 space-y-4">
                     <h1 className="text-3xl font-bold text-cinema-100 leading-tight">
                         {slides[currentSlide].title}
                     </h1>
@@ -83,14 +89,25 @@ export default function Onboarding({ onComplete }: { onComplete: () => void }) {
                         ))}
                     </div>
 
-                    {/* Button */}
-                    <button
-                        onClick={nextSlide}
-                        className="w-full bg-cinema-600 hover:bg-cinema-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                    >
-                        {currentSlide === slides.length - 1 ? 'Başla' : 'Devam Et'}
-                        <ChevronRight size={20} />
-                    </button>
+                    {/* Buttons */}
+                    <div className="flex items-center gap-3">
+                        {currentSlide > 0 && (
+                            <button
+                                onClick={prevSlide}
+                                className="w-14 h-14 bg-white/10 hover:bg-white/20 text-white rounded-2xl flex items-center justify-center transition-all active:scale-95"
+                            >
+                                <ChevronRight className="rotate-180" size={24} />
+                            </button>
+                        )}
+
+                        <button
+                            onClick={nextSlide}
+                            className="flex-1 bg-cinema-600 hover:bg-cinema-500 text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                        >
+                            {currentSlide === slides.length - 1 ? 'Başla' : 'Devam Et'}
+                            <ChevronRight size={20} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
