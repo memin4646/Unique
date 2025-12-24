@@ -402,6 +402,9 @@ export default function Home() {
                     </div>
                 )}
             </div>
+
+            {/* Onboarding Overlay */}
+            {showOnboarding && <Onboarding onComplete={finishOnboarding} />}
         </PullToRefresh>
     );
 }
