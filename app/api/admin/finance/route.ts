@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
     try {
+        // SECURITY CHECK
+        const session = await getServerSession(authOptions);
+        // @ts-ignore
+        if (!session || !session.user?.isAdmin) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        }
+
         // Get start and end of today
         const today = new Date();
         today.setHours(0, 0, 0, 0);

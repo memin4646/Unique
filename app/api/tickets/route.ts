@@ -70,9 +70,20 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const body = await req.json();
 
         const { userId, movieId, movieTitle, date, time, slot, vehicle, price, attendeeCount } = body;
+
+        // SECURITY CHECK: Ensure user is creating ticket for themselves (or is admin)
+        // @ts-ignore
+        if (userId !== session.user.id && !session.user.isAdmin) {
+            return NextResponse.json({ error: "Unauthorized operation" }, { status: 403 });
+        }
 
         // CHECK AVAILABILITY
         const existingTicket = await prisma.ticket.findFirst({
