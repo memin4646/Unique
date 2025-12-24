@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { PullToRefresh } from "@/components/ui/PullToRefresh";
 import { AdminTicketCard, Ticket, TicketType } from "@/components/admin/AdminTicketCard";
-import { Filter, UserCircle, Film, QrCode, CheckCircle, Gift } from "lucide-react";
+import { Filter, UserCircle, Film, QrCode, CheckCircle, Gift, Star } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -129,10 +129,16 @@ export default function AdminPage() {
                         </h2>
                         <p className="text-gray-400 text-sm">Aktif İstekler: {activeTickets.length}</p>
                     </div>
-                    <Link href="/admin/scan" className="bg-cinema-500 hover:bg-cinema-400 text-white md:px-4 md:py-2 p-2 rounded-lg flex items-center gap-2 font-bold transition shadow-lg shadow-purple-900/20">
-                        <QrCode size={20} />
-                        <span className="hidden md:inline">Kamera ile Tara</span>
-                    </Link>
+                    <div className="flex gap-2">
+                        <Link href="/admin/ratings" className="bg-white/10 hover:bg-white/20 text-white md:px-4 md:py-2 p-2 rounded-lg flex items-center gap-2 font-bold transition border border-white/10">
+                            <Star size={20} className="text-yellow-500" />
+                            <span className="hidden md:inline">Değerlendirmeler</span>
+                        </Link>
+                        <Link href="/admin/scan" className="bg-cinema-500 hover:bg-cinema-400 text-white md:px-4 md:py-2 p-2 rounded-lg flex items-center gap-2 font-bold transition shadow-lg shadow-purple-900/20">
+                            <QrCode size={20} />
+                            <span className="hidden md:inline">Kamera ile Tara</span>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Filters */}
