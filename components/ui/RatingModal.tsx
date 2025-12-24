@@ -43,7 +43,7 @@ export const RatingModal: React.FC<RatingModalProps> = ({ movieTitle, onClose, o
 
     return (
         <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in slide-in-from-bottom-10 sm:fade-in duration-300">
-            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[80vh] flex flex-col shadow-2xl">
+            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[80vh] flex flex-col shadow-2xl mb-10 sm:mb-0">
 
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-white transition z-10">
                     <X size={24} />
