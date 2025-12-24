@@ -43,19 +43,19 @@ export const RatingModal: React.FC<RatingModalProps> = ({ movieTitle, onClose, o
 
     return (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in slide-in-from-bottom-10 sm:fade-in duration-300">
-            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[90vh] overflow-y-auto no-scrollbar">
+            <div className="bg-cinema-950 sm:bg-gradient-to-b sm:from-cinema-900 sm:to-black border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 max-w-sm w-full relative max-h-[90vh] flex flex-col">
 
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-white transition">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-white transition z-10">
                     <X size={24} />
                 </button>
 
-                <div className="text-center mb-8">
+                <div className="text-center mb-6 shrink-0">
                     <span className="text-xs font-bold text-cinema-500 tracking-widest uppercase mb-2 block">Deneyimini Puanla</span>
                     <h2 className="text-2xl font-black text-white leading-tight">{movieTitle}</h2>
                     <p className="text-gray-400 text-xs mt-1">Umarız keyifli vakit geçirmişsindir.</p>
                 </div>
 
-                <div className="space-y-6 mb-8">
+                <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 mb-6">
                     {/* Movie Rating */}
                     <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                         <label className="text-sm font-bold text-white mb-3 block flex items-center gap-2">
@@ -104,12 +104,14 @@ export const RatingModal: React.FC<RatingModalProps> = ({ movieTitle, onClose, o
                     </div>
                 </div>
 
-                <ButtonPrimary
-                    onClick={handleSubmit}
-                    disabled={movieRating === 0 || serviceRating === 0}
-                >
-                    Puanı Gönder
-                </ButtonPrimary>
+                <div className="shrink-0 pt-2">
+                    <ButtonPrimary
+                        onClick={handleSubmit}
+                        disabled={movieRating === 0 || serviceRating === 0}
+                    >
+                        Puanı Gönder
+                    </ButtonPrimary>
+                </div>
             </div>
         </div>
     );

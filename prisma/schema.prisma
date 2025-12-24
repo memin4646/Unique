@@ -29,6 +29,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   quizAttempts  QuizAttempt[]
+  ratings       Rating[]
 }
 
 model Account {
@@ -119,6 +120,7 @@ model Movie {
   trailerUrl  String
   coverImage  String?
   screenings  Screening[] @relation("MovieScreenings")
+  ratings     Rating[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -195,4 +197,16 @@ model QuizAttempt {
   createdAt DateTime @default(now())
 
   @@unique([userId, quizId]) // One attempt per quiz per user
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  movieId   String
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  rating    Float    // Movie Score (1-5)
+  service   Float    // Service Score (1-5)
+  comment   String?
+  createdAt DateTime @default(now())
 }

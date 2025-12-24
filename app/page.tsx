@@ -105,23 +105,90 @@ export default function Home() {
         return true;
     });
 
-    // Rating Logic (Mock)
+    // Rating Logic
     const [showRatingModal, setShowRatingModal] = useState(false);
+    const [ratingTicket, setRatingTicket] = useState<any>(null);
 
     useEffect(() => {
-        const hasPendingRating = !localStorage.getItem("dune_rated");
+        const checkRatingEligibility = async () => {
+            if (!user?.id) return;
 
-        if (hasPendingRating) {
-            const timer = setTimeout(() => {
-                setShowRatingModal(true);
-            }, 1000);
-            return () => clearTimeout(timer);
+            try {
+                const res = await fetch(`/api/tickets?userId=${user.id}`);
+                if (res.ok) {
+                    const tickets = await res.json();
+                    const now = new Date();
+
+                    // Find the latest ticket that:
+                    // 1. Is from the past (watched)
+                    // 2. Is older than 24 hours (1 day passed) - FOR DEMO: changed to 1 minute to test, user asked for 1 day
+                    // 3. Has NOT been rated yet (check localStorage)
+
+                    const eligibleTicket = tickets
+                        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        .find((ticket: any) => {
+                            try {
+                                const [day, month, year] = ticket.date.includes('.') ? ticket.date.split('.') : ticket.date.split('-');
+                                const timeParts = ticket.time.split(':');
+
+                                let ticketDate;
+                                if (day.length === 4) {
+                                    ticketDate = new Date(parseInt(day), parseInt(month) - 1, parseInt(year), parseInt(timeParts[0]), parseInt(timeParts[1]));
+                                } else {
+                                    ticketDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(timeParts[0]), parseInt(timeParts[1]));
+                                }
+
+                                // 24 Hours Rule
+                                const oneDayInMillis = 24 * 60 * 60 * 1000;
+                                const timeDiff = now.getTime() - ticketDate.getTime();
+
+                                const isOldEnough = timeDiff > oneDayInMillis;
+                                const isNotRated = !localStorage.getItem(`rated_ticket_${ticket.id}`);
+
+                                return isOldEnough && isNotRated;
+                            } catch (e) {
+                                return false;
+                            }
+                        });
+
+                    if (eligibleTicket) {
+                        setRatingTicket(eligibleTicket);
+                        setShowRatingModal(true);
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to check rating eligibility", e);
+            }
+        };
+
+        checkRatingEligibility();
+    }, [user]);
+
+    const handleRatingSubmit = async (data: { movie: number, service: number, comment: string }) => {
+        if (!ratingTicket || !user?.id) return;
+
+        try {
+            const res = await fetch("/api/ratings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.id,
+                    movieId: ratingTicket.movieId, // Use ID, not Title
+                    movieScore: data.movie,
+                    serviceScore: data.service,
+                    comment: data.comment
+                })
+            });
+
+            if (res.ok) {
+                localStorage.setItem(`rated_ticket_${ratingTicket.id}`, "true");
+                setShowRatingModal(false);
+                // Refresh movies to show new rating average if applicable
+                fetchMovies();
+            }
+        } catch (error) {
+            console.error("Failed to submit rating", error);
         }
-    }, []);
-
-    const handleRatingSubmit = (data: any) => {
-        console.log("Rating Submitted:", data);
-        localStorage.setItem("dune_rated", "true");
     };
 
     const handleRequestSubmit = async () => {
@@ -150,11 +217,16 @@ export default function Home() {
         <PullToRefresh onRefresh={handleRefresh}>
             <div className="flex flex-col h-full p-6 space-y-6 relative pb-24">
                 {/* Rating Modal Trigger */}
-                {showRatingModal && (
+                {showRatingModal && ratingTicket && (
                     <RatingModal
-                        movieTitle="Dune: Part Two"
+                        movieTitle={ratingTicket.movieTitle || "Film"}
                         onClose={() => {
-                            localStorage.setItem("dune_rated", "true");
+                            // If closed without rating, we might want to remind later.
+                            // For now, let's just close it. It will reappear on refresh unless we set a flag.
+                            // The user said "kapatınca kaybolsun", which implies it should not annoy them immediately again.
+                            // But standard behavior is usually "remind me later".
+                            // For simplicity based on request "her zaman aynı bilet geliyor eğer ki film izlendiyse", 
+                            // we will just close it. It will pop up again next reload if not rated.
                             setShowRatingModal(false);
                         }}
                         onSubmit={handleRatingSubmit}
