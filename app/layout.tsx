@@ -1,8 +1,22 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
     title: "Unique",
     description: "Drive-In Cinema Experience",
+    manifest: "/manifest.json",
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "black-translucent",
+        title: "Unique",
+    },
+};
+
+export const viewport: Viewport = {
+    themeColor: "#000000",
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
 };
 import "./globals.css";
 import { AppShell } from "@/components/ui/AppShell";
