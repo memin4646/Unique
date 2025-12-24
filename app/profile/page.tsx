@@ -3,7 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogOut, User as UserIcon, Calendar, Star, Ticket, Bell } from "lucide-react";
+import { LogOut, User as UserIcon, Calendar, Star, Ticket, Bell, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { PointsInfoModal } from "@/components/ui/PointsInfoModal";
 
@@ -100,6 +100,28 @@ export default function ProfilePage() {
                             <p className="text-white mt-1 opacity-50">{user.email} (Değiştirilemez)</p>
                         </div>
                     </div>
+                </div>
+
+                {/* Support */}
+                <div className="grid grid-cols-2 gap-4">
+                    <a
+                        href="mailto:destek@driveincinema.com"
+                        className="bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group"
+                    >
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition">
+                            <Mail size={20} className="text-blue-500" />
+                        </div>
+                        <span className="font-bold text-sm">Bize Ulaşın</span>
+                    </a>
+                    <a
+                        href="tel:4440000"
+                        className="bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group"
+                    >
+                        <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition">
+                            <Phone size={20} className="text-green-500" />
+                        </div>
+                        <span className="font-bold text-sm">Bizi Arayın</span>
+                    </a>
                 </div>
 
                 {/* Notifications & Logout */}
