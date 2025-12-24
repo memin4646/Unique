@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { isValidLuhn } from "@/lib/validation";
 
-const CATEGORIES = ["Tümü", "Yiyecek", "İçecek", "Atıştırmalık"];
+const CATEGORIES = ["Tümü", "Yiyecek", "İçecek", "Atıştırmalık", "Hizmet"];
 
 export default function MenuPage() {
     const router = useRouter();
@@ -19,6 +19,11 @@ export default function MenuPage() {
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState("Tümü");
     const [userPoints, setUserPoints] = useState(0);
+
+    // Message Modal for "Sahne Sizin"
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [customMessage, setCustomMessage] = useState("");
+    const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
     // Find active ticket location
     const activeLocation = React.useMemo(() => {
@@ -82,8 +87,32 @@ export default function MenuPage() {
             if (selectedCategory === "Yiyecek") return p.category === "food";
             if (selectedCategory === "İçecek") return p.category === "drink";
             if (selectedCategory === "Atıştırmalık") return p.category === "snack";
+            if (selectedCategory === "Hizmet") return p.category === "service";
             return true;
         });
+
+    const handleAddToCartClick = (item: any) => {
+        if (item.name.toLowerCase().includes("sahne sizin")) {
+            setSelectedServiceId(item.id);
+            setCustomMessage("");
+            setShowMessageModal(true);
+        } else {
+            addToCart({ id: item.id, name: item.name, price: item.price, quantity: 1, type: "buy" });
+        }
+    };
+
+    const confirmServiceOrder = () => {
+        if (!selectedServiceId) return;
+        const item = products.find(p => p.id === selectedServiceId);
+        if (!item) return;
+
+        const finalName = `${item.name} (Mesaj: ${customMessage})`;
+        addToCart({ id: item.id, name: finalName, price: item.price, quantity: 1, type: "buy" });
+
+        setShowMessageModal(false);
+        setCustomMessage("");
+        setSelectedServiceId(null);
+    };
 
     // Payment Validation Logic
     const handleInputChange = (field: string, value: string) => {
@@ -222,9 +251,12 @@ export default function MenuPage() {
             {/* Content */}
             <div className="p-6 grid grid-cols-2 gap-4">
                 {filteredProducts.map(item => (
-                    <div key={item.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col relative group overflow-hidden hover:border-white/20 transition">
+                    <div key={item.id} className={`bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col relative group overflow-hidden hover:border-white/20 transition ${item.category === 'service' ? 'col-span-2 bg-gradient-to-r from-purple-900/20 to-cinema-900/20 border-purple-500/30' : ''}`}>
+                        {/* Special badge for services */}
+                        {item.category === 'service' && <div className="absolute top-2 right-2 bg-purple-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">PREMIUM</div>}
+
                         {/* Image Placeholder */}
-                        <div className="aspect-square bg-gray-800 rounded-xl mb-3 overflow-hidden">
+                        <div className={`aspect-square bg-gray-800 rounded-xl mb-3 overflow-hidden ${item.category === 'service' ? 'aspect-video' : ''}`}>
                             {item.image ? (
                                 <img src={item.image} className="w-full h-full object-cover" />
                             ) : (
@@ -246,11 +278,11 @@ export default function MenuPage() {
                                 <div className="flex items-center gap-2 bg-cinema-900 rounded-lg p-1 border border-cinema-500/30">
                                     <button onClick={() => removeFromCart(item.id)} className="w-6 h-6 flex items-center justify-center bg-white/10 rounded text-white text-xs hover:bg-white/20">-</button>
                                     <span className="text-white text-xs font-bold w-3 text-center">{cart[item.id].quantity}</span>
-                                    <button onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, quantity: 1, type: "buy" })} className="w-6 h-6 flex items-center justify-center bg-cinema-500 rounded text-white text-xs hover:bg-cinema-400">+</button>
+                                    <button onClick={() => handleAddToCartClick(item)} className="w-6 h-6 flex items-center justify-center bg-cinema-500 rounded text-white text-xs hover:bg-cinema-400">+</button>
                                 </div>
                             ) : (
                                 <button
-                                    onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, quantity: 1, type: "buy" })}
+                                    onClick={() => handleAddToCartClick(item)}
                                     className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-cinema-500 hover:scale-110 active:scale-95 transition"
                                 >
                                     <Plus size={16} />
@@ -292,6 +324,43 @@ export default function MenuPage() {
                 </div>
             )}
 
+            {/* Custom Message Modal */}
+            {showMessageModal && (
+                <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in">
+                    <div className="w-full max-w-sm bg-cinema-900 border border-purple-500/30 rounded-3xl p-6 shadow-2xl relative">
+                        <h2 className="text-xl font-bold text-white mb-2">Sahne Sizin 🎬</h2>
+                        <p className="text-gray-400 text-xs mb-4">Dev ekranda yayınlanmasını istediğiniz mesajınızı yazın. (Şiir, kutlama, ilan-ı aşk...)</p>
+
+                        <textarea
+                            value={customMessage}
+                            onChange={(e) => setCustomMessage(e.target.value)}
+                            maxLength={100}
+                            placeholder="Mesajınız buraya..."
+                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 min-h-[100px] mb-2"
+                        />
+                        <div className="text-right text-xs text-gray-500 mb-6">
+                            {customMessage.length}/100
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowMessageModal(false)}
+                                className="flex-1 py-3 rounded-xl bg-gray-800 text-white font-bold"
+                            >
+                                Vazgeç
+                            </button>
+                            <button
+                                onClick={confirmServiceOrder}
+                                disabled={!customMessage.trim()}
+                                className="flex-[2] py-3 rounded-xl bg-purple-600 disabled:bg-purple-600/50 text-white font-bold"
+                            >
+                                Ekle (+2000₺)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Checkout Modal */}
             {showCheckout && (
                 <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6">
@@ -306,7 +375,7 @@ export default function MenuPage() {
                                 <div className="space-y-4 mb-6 overflow-y-auto flex-1">
                                     {Object.values(cart).map((item: any) => (
                                         <div key={item.id} className="flex justify-between text-sm text-gray-300 border-b border-white/5 pb-2">
-                                            <span>{item.quantity}x {item.name}</span>
+                                            <span className="max-w-[70%]">{item.quantity}x {item.name}</span>
                                             <span>{item.price * item.quantity} ₺</span>
                                         </div>
                                     ))}
@@ -458,7 +527,9 @@ export default function MenuPage() {
                         </div>
                         <h2 className="text-2xl font-bold text-white mb-2">Ödeme Başarılı!</h2>
                         <p className="text-gray-400 mb-6">
-                            Siparişiniz mutfağa iletildi.<br />Afiyet olsun!
+                            {userPoints > 0
+                                ? "Mesajınız operasyon ekibimize iletildi. Onay sonrası yayına alınacaktır."
+                                : "Siparişiniz mutfağa iletildi. Afiyet olsun!"}
                         </p>
                         <button
                             onClick={() => setOrderSuccess(false)}
