@@ -130,13 +130,13 @@ export default function AdminPage() {
                         <p className="text-gray-400 text-sm">Aktif İstekler: {activeTickets.length}</p>
                     </div>
                     <div className="flex gap-2">
-                        <Link href="/admin/ratings" className="bg-white/10 hover:bg-white/20 text-white md:px-4 md:py-2 p-2 rounded-lg flex items-center gap-2 font-bold transition border border-white/10">
-                            <Star size={20} className="text-yellow-500" />
-                            <span className="hidden md:inline">Değerlendirmeler</span>
+                        <Link href="/admin/ratings" className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg flex items-center gap-2 font-bold transition border border-white/10 shrink-0">
+                            <Star size={18} className="text-yellow-500 fill-yellow-500" />
+                            <span className="text-xs">Değerlendirmeler</span>
                         </Link>
-                        <Link href="/admin/scan" className="bg-cinema-500 hover:bg-cinema-400 text-white md:px-4 md:py-2 p-2 rounded-lg flex items-center gap-2 font-bold transition shadow-lg shadow-purple-900/20">
-                            <QrCode size={20} />
-                            <span className="hidden md:inline">Kamera ile Tara</span>
+                        <Link href="/admin/scan" className="bg-cinema-500 hover:bg-cinema-400 text-white px-3 py-2 rounded-lg flex items-center gap-2 font-bold transition shadow-lg shadow-purple-900/20 shrink-0">
+                            <QrCode size={18} />
+                            <span className="text-xs">Tara</span>
                         </Link>
                     </div>
                 </div>
