@@ -49,13 +49,13 @@ export async function GET(req: Request) {
         });
 
         // 3. Calculate Stats
-        const ticketRevenue = tickets.reduce((sum, t) => sum + t.price, 0);
-        const orderRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+        const ticketRevenue = tickets.reduce((sum: number, t: any) => sum + t.price, 0);
+        const orderRevenue = orders.reduce((sum: number, o: any) => sum + o.totalAmount, 0);
         const totalRevenue = ticketRevenue + orderRevenue;
 
         // 4. Combine Recent Transactions for Table
         const transactions = [
-            ...tickets.map(t => ({
+            ...tickets.map((t: any) => ({
                 id: t.id,
                 type: 'Bilet Satışı',
                 amount: t.price,
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
                 time: t.createdAt,
                 status: 'Tamamlandı'
             })),
-            ...orders.map(o => ({
+            ...orders.map((o: any) => ({
                 id: o.id,
                 type: 'Mağaza Siparişi',
                 amount: o.totalAmount,
@@ -73,7 +73,7 @@ export async function GET(req: Request) {
                 time: o.createdAt,
                 status: o.status
             }))
-        ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+        ].sort((a: any, b: any) => new Date(b.time).getTime() - new Date(a.time).getTime());
 
         return NextResponse.json({
             summary: {
