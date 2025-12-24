@@ -3,7 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogOut, User as UserIcon, Calendar, Star, Ticket, Bell, Mail, Phone } from "lucide-react";
+import { LogOut, User as UserIcon, Calendar, Star, Ticket, Bell, Mail, Phone, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { PointsInfoModal } from "@/components/ui/PointsInfoModal";
 
@@ -16,6 +16,7 @@ export default function ProfilePage() {
 
     const [showMail, setShowMail] = useState(false);
     const [showPhone, setShowPhone] = useState(false);
+    const [showSupport, setShowSupport] = useState(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -106,38 +107,48 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Support */}
-                <div className="grid grid-cols-2 gap-4">
-                    <button
-                        onClick={() => {
-                            if (showMail) window.location.href = "mailto:destek@driveincinema.com";
-                            else setShowMail(true);
-                        }}
-                        className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showMail ? 'bg-blue-600 border-blue-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
-                    >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showMail ? 'bg-white text-blue-600' : 'bg-blue-500/10 text-blue-500 group-hover:scale-110'}`}>
-                            <Mail size={20} />
-                        </div>
-                        <span className={`font-bold text-sm text-center transition-all ${showMail ? 'text-white' : 'text-gray-200'}`}>
-                            {showMail ? "destek@driveincinema.com" : "Bize Ulaşın"}
-                        </span>
-                        {showMail && <span className="text-[10px] text-blue-100 opacity-80">(Mail Gönder)</span>}
-                    </button>
+                <div className="space-y-3">
+                    {!showSupport ? (
+                        <button
+                            onClick={() => setShowSupport(true)}
+                            className="w-full bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition"
+                        >
+                            <MessageSquare size={18} className="text-blue-400" />
+                            Destek & İletişim
+                        </button>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
+                            <button
+                                onClick={() => {
+                                    if (showMail) window.location.href = "mailto:destek@driveincinema.com";
+                                    else setShowMail(true);
+                                }}
+                                className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showMail ? 'bg-blue-600 border-blue-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
+                            >
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showMail ? 'bg-white text-blue-600' : 'bg-blue-500/10 text-blue-500 group-hover:scale-110'}`}>
+                                    <Mail size={20} />
+                                </div>
+                                <span className={`font-bold text-sm text-center transition-all ${showMail ? 'text-white' : 'text-gray-200'}`}>
+                                    {showMail ? "destek@driveincinema.com" : "E-posta Gönder"}
+                                </span>
+                            </button>
 
-                    <button
-                        onClick={() => {
-                            if (showPhone) window.location.href = "tel:08501234567";
-                            else setShowPhone(true);
-                        }}
-                        className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showPhone ? 'bg-green-600 border-green-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
-                    >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showPhone ? 'bg-white text-green-600' : 'bg-green-500/10 text-green-500 group-hover:scale-110'}`}>
-                            <Phone size={20} />
+                            <button
+                                onClick={() => {
+                                    if (showPhone) window.location.href = "tel:08501234567";
+                                    else setShowPhone(true);
+                                }}
+                                className={`border transition-all p-4 rounded-xl flex flex-col items-center justify-center gap-2 group relative overflow-hidden ${showPhone ? 'bg-green-600 border-green-500' : 'bg-gray-900 border-gray-800 hover:bg-gray-800'}`}
+                            >
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${showPhone ? 'bg-white text-green-600' : 'bg-green-500/10 text-green-500 group-hover:scale-110'}`}>
+                                    <Phone size={20} />
+                                </div>
+                                <span className={`font-bold text-sm text-center transition-all ${showPhone ? 'text-white' : 'text-gray-200'}`}>
+                                    {showPhone ? "0850 123 45 67" : "Bizi Ara"}
+                                </span>
+                            </button>
                         </div>
-                        <span className={`font-bold text-sm text-center transition-all ${showPhone ? 'text-white' : 'text-gray-200'}`}>
-                            {showPhone ? "0850 123 45 67" : "Bizi Arayın"}
-                        </span>
-                        {showPhone && <span className="text-[10px] text-green-100 opacity-80">(Hemen Ara)</span>}
-                    </button>
+                    )}
                 </div>
 
                 {/* Notifications & Logout */}
