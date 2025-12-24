@@ -14,6 +14,9 @@ export default function ProfilePage() {
     const [editData, setEditData] = useState({ name: "", phone: "" });
     const [showPointsInfo, setShowPointsInfo] = useState(false);
 
+    const [showMail, setShowMail] = useState(false);
+    const [showPhone, setShowPhone] = useState(false);
+
     useEffect(() => {
         if (!isLoading && !user) {
             router.push("/login");
@@ -30,14 +33,6 @@ export default function ProfilePage() {
     if (isLoading || !user) {
         return <div className="min-h-screen bg-black text-white flex items-center justify-center">Yükleniyor...</div>;
     }
-
-    return (
-    const [showMail, setShowMail] = useState(false);
-    const [showPhone, setShowPhone] = useState(false);
-
-    // ... (existing effects) ...
-
-    // ... (existing helper functions) ...
 
     return (
         <div className="min-h-screen text-white pb-20 pt-24 px-4">
