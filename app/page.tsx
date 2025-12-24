@@ -114,19 +114,36 @@ export default function Home() {
             if (!user?.id) return;
 
             try {
-                const res = await fetch(`/api/tickets?userId=${user.id}`);
-                if (res.ok) {
-                    const tickets = await res.json();
+                // Fetch Tickets AND existing Ratings
+                const [ticketsRes, ratingsRes] = await Promise.all([
+                    fetch(`/api/tickets?userId=${user.id}`),
+                    fetch(`/api/ratings?userId=${user.id}`)
+                ]);
+
+                if (ticketsRes.ok && ratingsRes.ok) {
+                    const tickets = await ticketsRes.json();
+                    const ratings = await ratingsRes.json();
                     const now = new Date();
+
+                    // Create Set of Rated Movie IDs
+                    const ratedMovieIds = new Set(ratings.map((r: any) => r.movieId));
 
                     // Find the latest ticket that:
                     // 1. Is from the past (watched)
-                    // 2. Is older than 24 hours (1 day passed) - FOR DEMO: changed to 1 minute to test, user asked for 1 day
-                    // 3. Has NOT been rated yet (check localStorage)
+                    // 2. Is older than 24 hours (1 day passed)
+                    // 3. Movie has NOT been rated in DB
+                    // 4. Ticket has NOT been dismissed locally
 
                     const eligibleTicket = tickets
                         .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                         .find((ticket: any) => {
+                            // If movie is already rated in DB, skip
+                            if (ratedMovieIds.has(ticket.movieId)) return false;
+
+                            // If locally dismissed/rated, skip
+                            if (localStorage.getItem(`rated_ticket_${ticket.id}`) === "true") return false;
+                            if (localStorage.getItem(`dismissed_ticket_${ticket.id}`) === "true") return false;
+
                             try {
                                 const [day, month, year] = ticket.date.includes('.') ? ticket.date.split('.') : ticket.date.split('-');
                                 const timeParts = ticket.time.split(':');
@@ -142,10 +159,7 @@ export default function Home() {
                                 const oneDayInMillis = 24 * 60 * 60 * 1000;
                                 const timeDiff = now.getTime() - ticketDate.getTime();
 
-                                const isOldEnough = timeDiff > oneDayInMillis;
-                                const isNotRated = !localStorage.getItem(`rated_ticket_${ticket.id}`);
-
-                                return isOldEnough && isNotRated;
+                                return timeDiff > oneDayInMillis;
                             } catch (e) {
                                 return false;
                             }
@@ -221,12 +235,8 @@ export default function Home() {
                     <RatingModal
                         movieTitle={ratingTicket.movieTitle || "Film"}
                         onClose={() => {
-                            // If closed without rating, we might want to remind later.
-                            // For now, let's just close it. It will reappear on refresh unless we set a flag.
-                            // The user said "kapatınca kaybolsun", which implies it should not annoy them immediately again.
-                            // But standard behavior is usually "remind me later".
-                            // For simplicity based on request "her zaman aynı bilet geliyor eğer ki film izlendiyse", 
-                            // we will just close it. It will pop up again next reload if not rated.
+                            // User actively closed it. Mark as dismissed so it doesn't pop up again immediately.
+                            localStorage.setItem(`dismissed_ticket_${ratingTicket.id}`, "true");
                             setShowRatingModal(false);
                         }}
                         onSubmit={handleRatingSubmit}
