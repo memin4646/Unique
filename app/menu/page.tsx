@@ -427,10 +427,9 @@ export default function MenuPage() {
                                         </div>
                                     </div>
 
-                                    {/* Policies Modal */}
                                     <div className="text-center mt-6 p-3 bg-white/5 rounded-xl border border-white/5">
                                         <p className="text-[10px] text-gray-400 leading-relaxed">
-                                            Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+                                            Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>&apos;nı kabul etmiş sayılırsınız.
                                         </p>
                                     </div>
                                 </div>

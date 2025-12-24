@@ -274,7 +274,7 @@ export default function CheckoutPage() {
             {/* Policies */}
             <div className="text-center mt-8 mb-6 p-4 bg-white/5 rounded-xl border border-white/5">
                 <p className="text-xs text-gray-400 leading-relaxed">
-                    Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+                    Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>&apos;nı kabul etmiş sayılırsınız.
                 </p>
             </div>
 

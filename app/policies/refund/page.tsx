@@ -22,7 +22,7 @@ export default function RefundPolicy() {
 
                 <section>
                     <h2 className="text-white font-bold text-lg mb-2">2. Yiyecek/İçecek Siparişleri</h2>
-                    <p>Mutfak siparişleri, "Hazırlanıyor" statüsüne geçmeden önce iptal edilebilir. Hazırlanmaya başlanan siparişlerin iptali mümkün değildir.</p>
+                    <p>Mutfak siparişleri, &quot;Hazırlanıyor&quot; statüsüne geçmeden önce iptal edilebilir. Hazırlanmaya başlanan siparişlerin iptali mümkün değildir.</p>
                 </section>
 
                 <section>
