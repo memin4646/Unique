@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LogOut, User as UserIcon, Calendar, Star, Ticket, Bell } from "lucide-react";
 import Link from "next/link";
+import { PointsInfoModal } from "@/components/ui/PointsInfoModal";
 
 export default function ProfilePage() {
     const { user, logout, updateUser, isLoading } = useAuth();
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({ name: "", phone: "" });
+    const [showPointsInfo, setShowPointsInfo] = useState(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -39,10 +41,13 @@ export default function ProfilePage() {
                     </div>
                     <h1 className="text-2xl font-bold">{user.name}</h1>
                     <p className="text-gray-400">{user.email}</p>
-                    <div className="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-500 px-4 py-1.5 rounded-full text-sm font-bold border border-yellow-500/20">
+                    <button
+                        onClick={() => setShowPointsInfo(true)}
+                        className="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-500 px-4 py-1.5 rounded-full text-sm font-bold border border-yellow-500/20 hover:bg-yellow-500/20 transition cursor-pointer"
+                    >
                         <Star size={16} fill="currentColor" />
                         {user.points} Puan
-                    </div>
+                    </button>
                 </div>
 
                 {/* Actions */}
@@ -122,6 +127,8 @@ export default function ProfilePage() {
                     </button>
                 </div>
             </div>
+
+            <PointsInfoModal isOpen={showPointsInfo} onClose={() => setShowPointsInfo(false)} />
         </div>
     );
 }
