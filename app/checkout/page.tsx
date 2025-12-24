@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle } from "lucide-react";
+import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle, Trash2, Plus, Minus } from "lucide-react";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { isValidLuhn } from "@/lib/validation";
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { cart, totalPrice, clearCart, removeFromCart } = useCart();
+    const { cart, totalPrice, clearCart, removeFromCart, addToCart, deleteItem } = useCart();
     const { addPoints, user } = useAuth();
 
     const [isProcessing, setIsProcessing] = useState(false);
@@ -130,20 +130,52 @@ export default function CheckoutPage() {
             <div className="bg-white/5 rounded-2xl p-4 border border-white/10 mb-6">
                 <h3 className="text-gray-400 text-xs font-bold uppercase mb-4">Sipariş Özeti</h3>
                 <div className="space-y-3">
-                    {cartItems.map(item => (
-                        <div key={item.id} className="flex justify-between text-sm">
-                            <div className="flex flex-col">
-                                <span className="text-white">{item.quantity}x {item.name}</span>
-                                <button
-                                    onClick={() => removeFromCart(item.id)}
-                                    className="text-red-400 text-[10px] font-bold text-left hover:text-red-300 transition w-fit mt-1"
-                                >
-                                    KALDIR
-                                </button>
-                            </div>
-                            <span className="text-cinema-gold font-bold">{item.price === 0 ? "Ücretsiz" : `${item.price * item.quantity} ₺`}</span>
-                        </div>
-                    ))}
+                    <div className="space-y-4">
+                        {cartItems.map(item => {
+                            const isTicket = item.type === 'ticket';
+                            return (
+                                <div key={item.id} className="flex justify-between items-center text-sm bg-black/30 p-3 rounded-xl border border-white/5">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-white font-medium">{item.name}</span>
+                                        <span className="text-cinema-gold font-bold text-xs">{item.price === 0 ? "Ücretsiz" : `${item.price * item.quantity} ₺`}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        {/* Controls */}
+                                        {!isTicket ? (
+                                            <div className="flex items-center gap-3 bg-white/10 rounded-lg p-1">
+                                                <button
+                                                    onClick={() => removeFromCart(item.id)}
+                                                    className="w-6 h-6 flex items-center justify-center text-white hover:bg-white/10 rounded transition"
+                                                >
+                                                    <Minus size={14} />
+                                                </button>
+                                                <span className="text-white font-bold w-4 text-center">{item.quantity}</span>
+                                                <button
+                                                    onClick={() => addToCart(item)}
+                                                    className="w-6 h-6 flex items-center justify-center text-white hover:bg-white/10 rounded transition"
+                                                >
+                                                    <Plus size={14} />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-white/10 rounded-lg px-3 py-1 text-xs text-gray-400 font-bold">
+                                                {item.quantity} Adet
+                                            </div>
+                                        )}
+
+                                        {/* Delete Button */}
+                                        <button
+                                            onClick={() => deleteItem(item.id)}
+                                            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
                 <div className="h-px bg-white/10 my-4" />
                 <div className="flex justify-between items-center bg-black/20 p-3 rounded-xl border border-white/5">

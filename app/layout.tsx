@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 import "./globals.css";
 import { AppShell } from "@/components/ui/AppShell";
 import { Providers } from "@/components/Providers";
+import { FloatingCart } from "@/components/ui/FloatingCart";
 
 import { RadioProvider } from "@/context/RadioContext";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
                         <main className="w-full max-w-md mx-auto min-h-screen relative shadow-2xl shadow-black">
                             {/* max-w-md ensures mobile view even on desktop */}
                             <AppShell>{children}</AppShell>
+                            <FloatingCart />
                         </main>
                     </RadioProvider>
                 </Providers>
