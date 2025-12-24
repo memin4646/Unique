@@ -4,13 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 export const FloatingCart = () => {
     const { totalItems } = useCart();
+    const { user } = useAuth();
     const pathname = usePathname();
 
-    // Hide if empty or already on checkout
-    if (totalItems === 0 || pathname === "/checkout") return null;
+    // Hide if empty, not logged in, or already on checkout
+    if (totalItems === 0 || !user || pathname === "/checkout") return null;
 
     return (
         <Link

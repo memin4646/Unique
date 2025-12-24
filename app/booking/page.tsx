@@ -1,7 +1,7 @@
 "use client";
 // ... (imports remain the same)
 import React, { useState, useEffect, Suspense } from "react";
-import { ChevronLeft, Car, Truck, Check, Info, CreditCard, Calendar, Lock, Star, Percent } from "lucide-react";
+import { ChevronLeft, Car, Truck, Check, Info, CreditCard, Calendar, Lock, Star, Percent, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { ParkingMap } from "@/components/ui/ParkingMap";
@@ -362,13 +362,27 @@ function BookingContent() {
                     <div className="bg-gradient-to-br from-cinema-800 to-cinema-900 p-6 rounded-2xl border border-white/10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-3 opacity-20"><CreditCard size={100} /></div>
 
-                        <h3 className="text-white font-bold text-lg mb-1">Ödeme Özeti</h3>
-                        <div className="flex justify-between items-center text-sm text-gray-400 mb-4">
+                        <div className="flex justify-between items-start mb-4 relative z-10">
+                            <div>
+                                <h3 className="text-white font-bold text-lg mb-1">Ödeme Özeti</h3>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <div className="flex items-center gap-1 bg-green-500/20 px-2 py-1 rounded-lg border border-green-500/30">
+                                        <ShieldCheck size={12} className="text-green-500" />
+                                        <span className="text-[10px] font-bold text-green-100">3D Secure</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 bg-yellow-500/20 px-2 py-1 rounded-lg border border-yellow-500/30">
+                                        <Lock size={12} className="text-yellow-500" />
+                                        <span className="text-[10px] font-bold text-yellow-100">SSL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center text-sm text-gray-400 mb-4 relative z-10">
                             <span>Park Yeri: <b className="text-white">{selectedSlot}</b> <span className="text-[10px] px-2 py-0.5 rounded bg-white/10 uppercase">{selectedTier}</span></span>
                             <span>Kişi: <b className="text-white">{attendeeCount}</b></span>
                             <span>Araç: <b className="text-white">{vehicle === "sedan" ? "Sedan" : "SUV"}</b></span>
                         </div>
-                        <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                        <div className="flex justify-between items-center pt-4 border-t border-white/10 relative z-10">
                             <span className="text-gray-300">Toplam Tutar</span>
                             <span className="text-2xl font-bold text-white">{selectedPrice.toFixed(2)} ₺</span>
                         </div>
@@ -432,6 +446,13 @@ function BookingContent() {
                                 </div>
                                 {errors.cvc && <p className="text-xs text-red-500 ml-1">{errors.cvc}</p>}
                             </div>
+                        </div>
+
+                        {/* Policies Modal */}
+                        <div className="text-center mt-2 p-3 bg-white/5 rounded-xl border border-white/5">
+                            <p className="text-[10px] text-gray-400 leading-relaxed">
+                                Ödeme yaparak <a href="/policies/payment" className="text-cinema-gold font-bold hover:underline">Ödeme Güvenliği</a>, <a href="/policies/refund" className="text-cinema-gold font-bold hover:underline">İade Koşulları</a> ve <a href="/policies/privacy" className="text-cinema-gold font-bold hover:underline">Gizlilik Politikası</a>'nı kabul etmiş sayılırsınız.
+                            </p>
                         </div>
                     </div>
 
