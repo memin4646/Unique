@@ -99,8 +99,30 @@ export async function POST(req: Request) {
 
             // B. Create Product Order (if any products)
             if (products.length > 0) {
-                // Calculate Total
-                const productTotal = products.reduce((sum: number, p: any) => sum + (p.price * p.quantity), 0);
+                // SECURITY FIX: Fetch prices from DB
+                const productIds = products.map((p: any) => p.id);
+                const dbProducts = await tx.product.findMany({
+                    where: { id: { in: productIds } }
+                });
+
+                // Calculate Total using DB prices
+                let productTotal = 0;
+                const secureOrderItems = products.map((p: any) => {
+                    const dbProduct = dbProducts.find((dp) => dp.id === p.id);
+                    if (!dbProduct) throw new Error(`Ürün bulunamadı: ${p.name}`);
+
+                    const itemTotal = dbProduct.price * p.quantity;
+                    const finalPrice = dbProduct.price; // Use DB price
+
+                    productTotal += itemTotal;
+
+                    return {
+                        productId: p.id,
+                        name: dbProduct.name, // Use DB name
+                        price: finalPrice,
+                        quantity: p.quantity
+                    };
+                });
 
                 // Create Order Record
                 const order = await tx.order.create({
@@ -110,12 +132,7 @@ export async function POST(req: Request) {
                         status: 'PREPARING',
                         location: location || "Bilinmiyor", // Save location
                         items: {
-                            create: products.map((p: any) => ({
-                                productId: p.id,
-                                name: p.name,
-                                price: p.price,
-                                quantity: p.quantity
-                            }))
+                            create: secureOrderItems
                         }
                     }
                 });
