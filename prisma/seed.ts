@@ -80,6 +80,7 @@ async function main() {
         { name: 'Pepperoni Pizza', price: 240, category: 'Food', description: 'İnce hamur, bol malzemeli.', image: '/products/pepperoni_pizza.png' },
         { name: 'Nachos Tabağı', price: 190, category: 'Snack', description: 'Peynir soslu ve jalapenolu.', image: '/products/nachos_plate.png' },
         { name: 'Sahne Sizin', price: 2000, category: 'service', description: 'Mesajınızı dev ekranda yayınlayın. (Max 100 karakter)', image: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=1000&auto=format&fit=crop' },
+    ];
 
     for (const p of products) {
         await prisma.product.upsert({
