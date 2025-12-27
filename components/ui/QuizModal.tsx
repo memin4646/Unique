@@ -22,29 +22,29 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
     const [quizData, setQuizData] = useState<QuizData | null>(null);
 
     useEffect(() => {
+        const fetchQuizStatus = async () => {
+            try {
+                const res = await fetch(`/api/quiz?userId=${user?.id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.attempted) {
+                        setStep('completed');
+                    } else if (data.quiz) {
+                        setQuizData(data.quiz);
+                        setStep('start');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
         if (isOpen && user) {
             fetchQuizStatus();
         } else if (isOpen) {
             setStep('start'); // Guest mode backup (though logic implies user)
         }
     }, [isOpen, user]);
-
-    const fetchQuizStatus = async () => {
-        try {
-            const res = await fetch(`/api/quiz?userId=${user?.id}`);
-            if (res.ok) {
-                const data = await res.json();
-                if (data.attempted) {
-                    setStep('completed');
-                } else if (data.quiz) {
-                    setQuizData(data.quiz);
-                    setStep('start');
-                }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    };
 
     useEffect(() => {
         let interval: NodeJS.Timeout;

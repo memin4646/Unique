@@ -53,7 +53,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [hasActiveQuiz, setHasActiveQuiz] = useState(false);
 
-    const fetchMovies = async () => {
+    const fetchMovies = React.useCallback(async () => {
         try {
             const res = await fetch('/api/movies');
             if (res.ok) {
@@ -65,9 +65,9 @@ export default function Home() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const checkQuiz = async () => {
+    const checkQuiz = React.useCallback(async () => {
         if (!user) return;
         try {
             const res = await fetch(`/api/quiz?userId=${user.id}`);
@@ -83,15 +83,15 @@ export default function Home() {
         } catch (e) {
             console.error(e);
         }
-    };
+    }, [user]);
 
     useEffect(() => {
         fetchMovies();
-    }, []);
+    }, [fetchMovies]);
 
     useEffect(() => {
         checkQuiz();
-    }, [user, showQuiz]);
+    }, [checkQuiz, showQuiz]);
 
     const handleRefresh = async () => {
         await Promise.all([

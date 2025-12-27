@@ -28,36 +28,7 @@ export default function ScanPage() {
     }, [user, isLoading]);
 
     // Native Scanner Logic
-    useEffect(() => {
-        if (!isNative || !scanningEnabled) return;
-
-        const startNativeScan = async () => {
-            try {
-                const { camera } = await BarcodeScanner.requestPermissions();
-                if (camera === 'granted' || camera === 'limited') {
-                    document.body.classList.add("qr-scanner-active");
-                    const { barcodes } = await BarcodeScanner.scan({
-                        formats: [BarcodeFormat.QrCode]
-                    });
-
-                    if (barcodes.length > 0) {
-                        handleScan(barcodes[0].rawValue);
-                    }
-                }
-            } catch (e) {
-                console.error("Native scan error", e);
-            }
-        };
-
-        startNativeScan();
-
-        return () => {
-            document.body.classList.remove("qr-scanner-active");
-            BarcodeScanner.stopScan();
-        };
-    }, [isNative, scanningEnabled]);
-
-    const handleScan = async (result: string) => {
+    const handleScan = React.useCallback(async (result: string) => {
         if (!result) return;
 
         // DEBUG: Show what was actually scanned - REMOVED
@@ -94,7 +65,37 @@ export default function ScanPage() {
             console.error("Fetch Error", e);
             setFetchError(true);
         }
-    };
+    }, []);
+
+    // Native Scanner Logic
+    useEffect(() => {
+        if (!isNative || !scanningEnabled) return;
+
+        const startNativeScan = async () => {
+            try {
+                const { camera } = await BarcodeScanner.requestPermissions();
+                if (camera === 'granted' || camera === 'limited') {
+                    document.body.classList.add("qr-scanner-active");
+                    const { barcodes } = await BarcodeScanner.scan({
+                        formats: [BarcodeFormat.QrCode]
+                    });
+
+                    if (barcodes.length > 0) {
+                        handleScan(barcodes[0].rawValue);
+                    }
+                }
+            } catch (e) {
+                console.error("Native scan error", e);
+            }
+        };
+
+        startNativeScan();
+
+        return () => {
+            document.body.classList.remove("qr-scanner-active");
+            BarcodeScanner.stopScan();
+        };
+    }, [isNative, scanningEnabled, handleScan]);
 
     const handleReset = () => {
         setScannedResult(null);

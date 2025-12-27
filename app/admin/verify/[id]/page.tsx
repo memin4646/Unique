@@ -28,18 +28,7 @@ export default function VerifyTicketPage() {
     const [processing, setProcessing] = useState(false);
     const { user, isLoading: isAuthLoading } = useAuth();
 
-    useEffect(() => {
-        if (isAuthLoading) return;
-
-        if (!user || !user.isAdmin) {
-            router.push("/");
-            return;
-        }
-
-        fetchTicket();
-    }, [user, isAuthLoading]);
-
-    const fetchTicket = async () => {
+    const fetchTicket = React.useCallback(async () => {
         try {
             const res = await fetch(`/api/tickets/${params.id}`);
             if (!res.ok) throw new Error("Bilet bulunamadı");
@@ -56,7 +45,18 @@ export default function VerifyTicketPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [params.id]);
+
+    useEffect(() => {
+        if (isAuthLoading) return;
+
+        if (!user || !user.isAdmin) {
+            router.push("/");
+            return;
+        }
+
+        fetchTicket();
+    }, [user, isAuthLoading, fetchTicket]);
 
     const handleCheckIn = async () => {
         if (!ticket) return;
