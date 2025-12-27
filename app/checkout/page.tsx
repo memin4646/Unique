@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle, Trash2, Plus, Minus, ShieldCheck } from "lucide-react";
+import { ChevronLeft, CreditCard, Lock, Check, Calendar, UserCircle, Trash2, Plus, Minus, ShieldCheck, Gift } from "lucide-react";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { isValidLuhn } from "@/lib/validation";
 
@@ -19,6 +19,10 @@ export default function CheckoutPage() {
     const [cvc, setCvc] = useState("");
     const [errors, setErrors] = useState<any>({});
 
+    // New State for Social Feature
+    const [isGift, setIsGift] = useState(false);
+    const [targetSlot, setTargetSlot] = useState("");
+
     const cartItems = Object.values(cart);
 
     // Redirect if not logged in
@@ -26,6 +30,17 @@ export default function CheckoutPage() {
         if (typeof window !== 'undefined') router.push("/login?redirect=/checkout");
         return null; // Or a loader
     }
+
+    // Determine current user's slot
+    const activeSlot = React.useMemo(() => {
+        if (!user.tickets) return "Bilinmiyor";
+        // Use the most recent active ticket
+        // Sort by ID is a decent proxy for recency if dates are strings
+        const active = [...user.tickets]
+            .filter((t: any) => t.status === 'active')
+            .sort((a, b) => b.id.localeCompare(a.id))[0];
+        return active ? `${active.slot}` : "Aracım";
+    }, [user]);
 
     if (cartItems.length === 0) {
         return (
@@ -51,6 +66,10 @@ export default function CheckoutPage() {
         if (!/^\d{2}\/\d{2}$/.test(expiry)) newErrors.expiry = "Geçersiz tarih (AA/YY)";
         if (!/^\d{3}$/.test(cvc)) newErrors.cvc = "Geçersiz CVC";
 
+        if (isGift && !targetSlot.trim()) {
+            newErrors.targetSlot = "Hedef araç/koltuk no gerekli";
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -61,6 +80,14 @@ export default function CheckoutPage() {
         setIsProcessing(true);
 
         try {
+            // Determine Location String
+            let locationString = activeSlot;
+            if (isGift) {
+                locationString = `İKRAM (${activeSlot} -> ${targetSlot.toUpperCase()})`;
+            } else {
+                locationString = activeSlot;
+            }
+
             const res = await fetch("/api/complete-order", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -72,7 +99,8 @@ export default function CheckoutPage() {
                         expiry,
                         cvc
                     },
-                    items: cartItems
+                    items: cartItems,
+                    location: locationString // Send determined location
                 })
             });
 
@@ -182,6 +210,47 @@ export default function CheckoutPage() {
                     <span className="text-gray-400">Toplam Tutar</span>
                     <span className="text-2xl font-bold text-white">{totalPrice} ₺</span>
                 </div>
+            </div>
+
+            {/* Social / Gift Option */}
+            <div className={`mb-6 p-4 rounded-2xl border transition-all duration-300 ${isGift ? 'bg-cinema-900/40 border-cinema-500/50' : 'bg-white/5 border-white/10'}`}>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isGift ? 'bg-cinema-500 text-white' : 'bg-white/10 text-gray-400'}`}>
+                            <Gift size={20} />
+                        </div>
+                        <div>
+                            <h3 className={`text-sm font-bold ${isGift ? 'text-cinema-300' : 'text-white'}`}>Başka Araca Ismarla</h3>
+                            <p className="text-xs text-gray-400">Diğer bir izleyiciye sürpriz yapın</p>
+                        </div>
+                    </div>
+
+                    {/* Toggle Switch */}
+                    <button
+                        onClick={() => setIsGift(!isGift)}
+                        className={`w-12 h-6 rounded-full relative transition-colors duration-300 ${isGift ? 'bg-cinema-500' : 'bg-gray-700'}`}
+                    >
+                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${isGift ? 'left-7' : 'left-1'}`} />
+                    </button>
+                </div>
+
+                {/* Target Input (Collapsible) */}
+                {isGift && (
+                    <div className="mt-4 animate-in slide-in-from-top-2">
+                        <label className="text-xs text-cinema-300 ml-1 mb-1 block font-bold">Hedef Araç / Slot No</label>
+                        <input
+                            type="text"
+                            placeholder="Örn: A3"
+                            value={targetSlot}
+                            onChange={(e) => {
+                                setTargetSlot(e.target.value);
+                                if (errors.targetSlot) setErrors({ ...errors, targetSlot: null });
+                            }}
+                            className={`w-full bg-black/40 border ${errors.targetSlot ? 'border-red-500' : 'border-cinema-500/30'} rounded-xl py-3 px-4 text-white focus:border-cinema-500 outline-none transition-colors font-bold tracking-widest uppercase`}
+                        />
+                        {errors.targetSlot && <p className="text-red-500 text-[10px] ml-1 mt-1">{errors.targetSlot}</p>}
+                    </div>
+                )}
             </div>
 
             {/* Payment Form */}
