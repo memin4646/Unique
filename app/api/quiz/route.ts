@@ -64,7 +64,6 @@ export async function POST(req: Request) {
         if (userId !== session.user.id) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
-        const { userId, quizId, answer } = body;
 
         const quiz = await prisma.quiz.findUnique({ where: { id: quizId } });
         if (!quiz) return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
