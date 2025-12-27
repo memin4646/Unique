@@ -25,15 +25,9 @@ export default function CheckoutPage() {
 
     const cartItems = Object.values(cart);
 
-    // Redirect if not logged in
-    if (!user) {
-        if (typeof window !== 'undefined') router.push("/login?redirect=/checkout");
-        return null; // Or a loader
-    }
-
     // Determine current user's slot
     const activeSlot = React.useMemo(() => {
-        if (!user.tickets) return "Bilinmiyor";
+        if (!user || !user.tickets) return "Bilinmiyor";
         // Use the most recent active ticket
         // Sort by ID is a decent proxy for recency if dates are strings
         const active = [...user.tickets]
@@ -41,6 +35,12 @@ export default function CheckoutPage() {
             .sort((a, b) => b.id.localeCompare(a.id))[0];
         return active ? `${active.slot}` : "Aracım";
     }, [user]);
+
+    // Redirect if not logged in
+    if (!user) {
+        if (typeof window !== 'undefined') router.push("/login?redirect=/checkout");
+        return null; // Or a loader
+    }
 
     if (cartItems.length === 0) {
         return (
