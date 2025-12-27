@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 export async function GET(request: Request) {
     try {
         const session = await getServerSession(authOptions);
-        if (!session) {
+        if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -53,7 +53,7 @@ export async function PUT(request: Request) {
         const isAdmin = session.user.isAdmin;
 
         // Determine target email
-        let targetEmail = session.user.email;
+        let targetEmail: string = session.user.email;
         if (isAdmin && body.email) {
             targetEmail = body.email;
         }
