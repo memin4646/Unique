@@ -67,22 +67,22 @@ export default function FinancePage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <StatCard
                             title="Günlük Toplam Ciro"
-                            value={`${data?.summary.totalRevenue.toFixed(2)} ₺`}
+                            value={`${(data?.summary?.totalRevenue || 0).toFixed(2)} ₺`}
                             subValue="Bugün"
                             icon={DollarSign}
                             color="text-green-500"
                         />
                         <StatCard
                             title="Bilet Satışları"
-                            value={`${data?.summary.ticketRevenue.toFixed(2)} ₺`}
-                            subValue={`${data?.summary.ticketCount} Adet Bilet`}
+                            value={`${(data?.summary?.ticketRevenue || 0).toFixed(2)} ₺`}
+                            subValue={`${data?.summary?.ticketCount || 0} Adet Bilet`}
                             icon={Ticket}
                             color="text-purple-500"
                         />
                         <StatCard
                             title="Mağaza Satışları"
-                            value={`${data?.summary.orderRevenue.toFixed(2)} ₺`}
-                            subValue={`${data?.summary.orderCount} Adet Sipariş`}
+                            value={`${(data?.summary?.orderRevenue || 0).toFixed(2)} ₺`}
+                            subValue={`${data?.summary?.orderCount || 0} Adet Sipariş`}
                             icon={ShoppingBag}
                             color="text-orange-500"
                         />
@@ -110,7 +110,7 @@ export default function FinancePage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
-                                    {data?.transactions.length === 0 ? (
+                                    {!data?.transactions || data.transactions.length === 0 ? (
                                         <tr>
                                             <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                                                 Bugün henüz işlem yapılmadı.
@@ -124,8 +124,8 @@ export default function FinancePage() {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${tx.type === 'Bilet Satışı'
-                                                            ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-                                                            : 'bg-orange-500/10 text-orange-400 border-orange-500/20'
+                                                        ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                                        : 'bg-orange-500/10 text-orange-400 border-orange-500/20'
                                                         }`}>
                                                         {tx.type === 'Bilet Satışı' ? <Ticket size={12} /> : <ShoppingBag size={12} />}
                                                         {tx.type}
