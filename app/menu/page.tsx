@@ -7,6 +7,7 @@ import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { isValidLuhn } from "@/lib/validation";
+import Image from "next/image";
 
 const CATEGORIES = ["Tümü", "Yiyecek", "İçecek", "Atıştırmalık", "Hizmet"];
 
@@ -270,9 +271,15 @@ export default function MenuPage() {
                         {item.category === 'service' && <div className="absolute top-2 right-2 bg-purple-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">PREMIUM</div>}
 
                         {/* Image Placeholder */}
-                        <div className={`aspect-square bg-gray-800 rounded-xl mb-3 overflow-hidden ${item.category === 'service' ? 'aspect-video' : ''}`}>
+                        <div className={`aspect-square bg-gray-800 rounded-xl mb-3 overflow-hidden relative ${item.category === 'service' ? 'aspect-video' : ''}`}>
                             {item.image ? (
-                                <img src={item.image} className="w-full h-full object-cover" />
+                                <Image
+                                    src={item.image}
+                                    alt={item.name}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center text-gray-600">
                                     <ShoppingBag size={32} />

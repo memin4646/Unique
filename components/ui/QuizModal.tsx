@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { X, Target, Clock, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -63,7 +63,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
         setTimer(10);
     };
 
-    const submitAnswer = async (answer: string) => {
+    const submitAnswer = useCallback(async (answer: string) => {
         if (!quizData || !user) return;
 
         try {
@@ -89,7 +89,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose }) => {
         } catch (e) {
             console.error("Submission failed", e);
         }
-    };
+    }, [quizData, user, addPoints]);
 
     const handleAnswer = (answer: string) => {
         submitAnswer(answer);
