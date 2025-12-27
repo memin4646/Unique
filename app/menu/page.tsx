@@ -378,7 +378,7 @@ export default function MenuPage() {
             {/* Checkout Modal */}
             {showCheckout && (
                 <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6">
-                    <div className="w-full max-w-sm bg-cinema-900 border border-gray-700 rounded-3xl p-6 relative overflow-hidden flex flex-col max-h-[90vh]">
+                    <div className="w-full max-w-sm bg-cinema-900 border border-gray-700 rounded-3xl p-6 relative overflow-hidden flex flex-col max-h-[85vh]">
                         <h2 className="text-xl font-bold text-white mb-4 flex-shrink-0">
                             {checkoutStep === "summary" ? "Sipariş Özeti" : "Ödeme Bilgileri"}
                         </h2>
