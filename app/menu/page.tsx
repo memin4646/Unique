@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ShoppingBag, Plus, CreditCard, Loader2, CheckCircle, Calendar, Lock, Star, ShieldCheck } from "lucide-react";
+import { ChevronLeft, ShoppingBag, Plus, CreditCard, Loader2, CheckCircle, Calendar, Lock, Star, ShieldCheck, Gift } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ButtonPrimary } from "@/components/ui/ButtonPrimary";
 import { useAuth } from "@/context/AuthContext";
@@ -47,6 +47,10 @@ export default function MenuPage() {
         cvc: ""
     });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+    // Social / Gift State
+    const [isGift, setIsGift] = useState(false);
+    const [targetSlot, setTargetSlot] = useState("");
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -153,9 +157,18 @@ export default function MenuPage() {
     const handleOrderSubmit = async () => {
         if (!validateForm()) return;
 
+        if (isGift && !targetSlot.trim()) {
+            setErrors(prev => ({ ...prev, targetSlot: "Hedef araç gerekli" }));
+            return;
+        }
+
         setIsSubmitting(true);
         try {
-            const finalLocation = activeLocation || "Bilinmiyor (Biletsiz)";
+            let finalLocation = activeLocation || "Bilinmiyor (Biletsiz)";
+            if (isGift) {
+                finalLocation = `İKRAM (${activeLocation || 'Misafir'} -> ${targetSlot.toUpperCase()})`;
+            }
+
             const cartItems = Object.values(cart);
 
             const res = await fetch("/api/complete-order", {
@@ -434,6 +447,46 @@ export default function MenuPage() {
                                                 <span className="text-[10px] font-bold text-yellow-100">SSL 256-Bit</span>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Social / Gift Option */}
+                                    <div
+                                        onClick={() => setIsGift(!isGift)}
+                                        className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer hover:bg-white/10 ${isGift ? 'bg-cinema-900/40 border-cinema-500/50' : 'bg-white/5 border-white/10'}`}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isGift ? 'bg-cinema-500 text-white' : 'bg-white/10 text-gray-400'}`}>
+                                                    <Gift size={16} />
+                                                </div>
+                                                <div>
+                                                    <h3 className={`text-xs font-bold ${isGift ? 'text-cinema-300' : 'text-white'}`}>Başka Araca Ismarla</h3>
+                                                    <p className="text-[10px] text-gray-400">Sürpriz yapın</p>
+                                                </div>
+                                            </div>
+
+                                            <div className={`w-10 h-5 rounded-full relative transition-colors duration-300 ${isGift ? 'bg-cinema-500' : 'bg-gray-700'}`}>
+                                                <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300 ${isGift ? 'left-6' : 'left-1'}`} />
+                                            </div>
+                                        </div>
+
+                                        {isGift && (
+                                            <div
+                                                className="mt-3 animate-in slide-in-from-top-2 cursor-default"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <input
+                                                    type="text"
+                                                    placeholder="HEDEF ARAÇ NO (Örn: A3)"
+                                                    value={targetSlot}
+                                                    onChange={(e) => {
+                                                        setTargetSlot(e.target.value);
+                                                        if (errors.targetSlot) setErrors({ ...errors, targetSlot: "" });
+                                                    }}
+                                                    className={`w-full bg-black/40 border ${errors.targetSlot ? 'border-red-500' : 'border-cinema-500/30'} rounded-xl py-3 px-4 text-white focus:border-cinema-500 outline-none transition-colors font-bold text-xs uppercase`}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Card Holder */}
