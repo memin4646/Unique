@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const body = await req.json();
         const {
             userId,
@@ -11,6 +18,12 @@ export async function POST(req: Request) {
             location, // NEW: Capture location
             redeemPoints // NEW: Capture redemption flag
         } = body;
+
+        // Security Check
+        // @ts-ignore
+        if (userId && userId !== session.user.id) {
+            return NextResponse.json({ error: "Forbidden: Cannot order for another user" }, { status: 403 });
+        }
 
         // ... (Payment Validation code remains the same) ...
 

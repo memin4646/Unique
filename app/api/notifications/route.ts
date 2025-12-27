@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(request: Request) {
     try {
@@ -10,6 +12,12 @@ export async function GET(request: Request) {
             // If no email, check for global notifications OR all if admin (simplified for now)
             // For this prototype, we'll return global notifications + user specific if email provided
             return NextResponse.json({ error: "Email required" }, { status: 400 });
+        }
+
+        const session = await getServerSession(authOptions);
+        // @ts-ignore
+        if (!session || (session.user?.email !== email && !session.user?.isAdmin)) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         const user = await prisma.user.findUnique({
